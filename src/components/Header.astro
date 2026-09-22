@@ -4,6 +4,9 @@ import { nav } from "../data/xavathon";
 /* Active state from the current URL, so nothing needs passing in. */
 const here = Astro.url.pathname.replace(/\/$/, "") || "/";
 const isOn = (href: string) => here === href || (href !== "/" && here.startsWith(href));
+
+/* Registration CTA — swap this href for your actual registration route/section. */
+const registerHref = "/registration";
 ---
 
 <!-- No header bar anywhere on the site. This is the only piece of
@@ -48,6 +51,22 @@ const isOn = (href: string) => here === href || (href !== "/" && here.startsWith
         </li>
       ))}
     </ul>
+
+    <!-- Register — the primary action in this menu, set apart from the
+         regular links with its own filled, brass-colored button. -->
+    <div
+      style={`transition-delay:${nav.length * 25}ms`}
+      data-xv-item
+      class="mt-4 translate-y-2 border-t border-chalk/15 pt-4 opacity-0 transition-all duration-200 ease-out"
+    >
+      <a
+        href={registerHref}
+        aria-current={isOn(registerHref) ? "page" : undefined}
+        class="block rounded-lg bg-brass px-4 py-3 text-center font-display text-base font-bold uppercase tracking-[0.08em] text-deep transition-opacity hover:opacity-90"
+      >
+        Register
+      </a>
+    </div>
   </nav>
 </div>
 
