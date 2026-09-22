@@ -220,15 +220,22 @@ body {
 
 /* ---------------------------------------------------------------
    Hero slideshow — 3 stacked photos, auto-cycling, no controls.
-   All three run the same keyframe on the same total duration;
-   each one's --xv-slide-delay offsets it into its own slot, so
-   only one is ever visible at a time and the loop is seamless.
+   All three run the same keyframe on the same 24s duration; each
+   one's --xv-slide-delay (0s/8s/16s) offsets it into its own slot.
+
+   True dissolve, not a fade-to-background-then-fade-in: each slide
+   holds at full opacity right up to the slot boundary, THEN spends
+   the next 2s fading 1 -> 0 — which is the exact same 2s window the
+   next slide (delay +8s) spends fading 0 -> 1 from its own 0%. Both
+   ramps are linear over an identical window, so their opacities sum
+   to 1 for the whole crossfade: it's always a blend of two photos,
+   never a dip to bare background color.
 --------------------------------------------------------------- */
 @keyframes xv-hero-fade {
   0%      { opacity: 0; }
-  8.5%    { opacity: 1; }
-  25%     { opacity: 1; }
-  33%     { opacity: 0; }
+  8.33%   { opacity: 1; }
+  33.33%  { opacity: 1; }
+  41.67%  { opacity: 0; }
   100%    { opacity: 0; }
 }
 
