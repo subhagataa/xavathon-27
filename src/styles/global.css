@@ -241,7 +241,7 @@ body {
 
 .xv-hero-slide {
   opacity: 0;
-  animation: xv-hero-fade 18s ease-in-out infinite;
+  animation: xv-hero-fade 9s ease-in-out infinite;
   animation-delay: var(--xv-slide-delay, 0s);
 }
 
