@@ -21,8 +21,8 @@
    (--color-teal  ->  bg-teal / text-teal / border-teal)
 --------------------------------------------------------------- */
 @theme {
-  --color-deep: #14213d;   /* was #16273a — hue ~221°, indigo-navy */
-  --color-teal: #223d6e;   /* was #2e4d69 — hue ~215°, cobalt-navy */
+  --color-deep: #0d1a3a;   /* matches the poster bar — deep navy, hue ~222° */
+  --color-teal: #16305e;   /* one step brighter, same family — still dark enough for white text */
   --color-mist: #c9d4dd;
   --color-chalk: #f4f6f8;
   --color-brass: #d9a43c;
