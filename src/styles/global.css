@@ -217,3 +217,31 @@ body {
     animation: none;
   }
 }
+
+/* ---------------------------------------------------------------
+   Hero slideshow — 3 stacked photos, auto-cycling, no controls.
+   All three run the same keyframe on the same total duration;
+   each one's --xv-slide-delay offsets it into its own slot, so
+   only one is ever visible at a time and the loop is seamless.
+--------------------------------------------------------------- */
+@keyframes xv-hero-fade {
+  0%, 3%      { opacity: 0; }
+  6%, 27%     { opacity: 1; }
+  33%, 100%   { opacity: 0; }
+}
+
+.xv-hero-slide {
+  opacity: 0;
+  animation: xv-hero-fade 6s ease-in-out infinite;
+  animation-delay: var(--xv-slide-delay, 0s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xv-hero-slide {
+    animation: none;
+    opacity: 0;
+  }
+  .xv-hero-slide:first-child {
+    opacity: 1;
+  }
+}
