@@ -225,11 +225,11 @@ body {
    only one is ever visible at a time and the loop is seamless.
 --------------------------------------------------------------- */
 @keyframes xv-hero-fade {
-  0%      { opacity: 0; filter: blur(6px); }
-  8.5%    { opacity: 1; filter: blur(0); }
-  25%     { opacity: 1; filter: blur(0); }
-  33%     { opacity: 0; filter: blur(6px); }
-  100%    { opacity: 0; filter: blur(6px); }
+  0%      { opacity: 0; }
+  8.5%    { opacity: 1; }
+  25%     { opacity: 1; }
+  33%     { opacity: 0; }
+  100%    { opacity: 0; }
 }
 
 .xv-hero-slide {
