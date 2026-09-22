@@ -3,13 +3,21 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import InstagramFeed from "../components/InstagramFeed.astro";
 import { albums } from "../data/xavathon";
 
-/* Photographs are not in the repository yet. One flat grid of
-   placeholder tiles — as many as the total photo count — so
-   dropping real images in later changes nothing but the <img>
-   source. */
-const current = albums.filter((a) => !a.comingSoon);
 const upcoming = albums.filter((a) => a.comingSoon);
-const totalCount = current.reduce((sum, a) => sum + a.count, 0);
+
+/* The 8 photos for this page. Filenames map 1:1 to files under
+   public/images/gallery/ — add a caption here if you want one to
+   show, or leave it blank. */
+const photos = [
+  { src: "/images/gallery/race-01.jpg", alt: "Xavathon 2026 — race day" },
+  { src: "/images/gallery/race-02.jpg", alt: "Xavathon 2026 — race day" },
+  { src: "/images/gallery/race-03.jpg", alt: "Xavathon 2026 — race day" },
+  { src: "/images/gallery/race-04.jpg", alt: "Xavathon 2026 — race day" },
+  { src: "/images/gallery/race-05.jpg", alt: "Xavathon 2026 — race day" },
+  { src: "/images/gallery/race-06.jpg", alt: "Xavathon 2026 — race day" },
+  { src: "/images/gallery/race-07.jpg", alt: "Xavathon 2026 — race day" },
+  { src: "/images/gallery/race-08.jpg", alt: "Xavathon 2026 — race day" },
+];
 ---
 
 <BaseLayout
@@ -37,18 +45,12 @@ const totalCount = current.reduce((sum, a) => sum + a.count, 0);
   <!-- Photos — one flat grid, no albums or categories -->
   <section class="bg-deep py-16 text-chalk sm:py-20">
     <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
-      <p class="text-sm text-mist/60 tabular-nums">{totalCount} photographs</p>
+      <p class="text-sm text-mist/60 tabular-nums">{photos.length} photographs</p>
 
-      <!-- PHOTOGRAPHS GO HERE — replace each tile with an <img>. Every
-           tile is the same rectangular shape, laid out side by side. -->
       <div class="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
-        {Array.from({ length: totalCount }).map(() => (
-          <div class="grid aspect-[4/3] place-items-center border border-dashed border-mist/25 bg-mist/10 text-mist/40">
-            <svg viewBox="0 0 24 24" class="w-6" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-              <rect x="2" y="4.5" width="20" height="15" rx="2" />
-              <circle cx="8.5" cy="10" r="1.8" />
-              <path d="M2 16.5l5.5-5 4 3.5 3-2.5L22 17" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
+        {photos.map((p) => (
+          <div class="aspect-[4/3] overflow-hidden border border-mist/20 bg-mist/10">
+            <img src={p.src} alt={p.alt} class="h-full w-full object-cover" loading="lazy" />
           </div>
         ))}
       </div>
@@ -71,7 +73,7 @@ const totalCount = current.reduce((sum, a) => sum + a.count, 0);
           <p class="font-display text-sm font-semibold text-brass">Coming soon</p>
           <h2 class="font-display mt-3 text-3xl font-bold text-chalk sm:text-4xl">{a.title}</h2>
           <p class="mx-auto mt-3 max-w-[48ch] leading-relaxed text-mist/80">{a.blurb}</p>
-          <a
+          
             href="/register"
             class="mt-7 inline-block bg-brass px-7 py-3 font-display font-semibold text-deep transition-colors hover:bg-chalk"
           >
