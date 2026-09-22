@@ -22,10 +22,10 @@ const units = [
 
 const box =
   tone === "dark"
-    ? "border-brass/30 bg-gradient-to-b from-mist/15 to-white/0 text-chalk"
-    : "border-brass/40 bg-gradient-to-b from-teal/5 to-white text-deep";
+    ? "border-white/25 bg-gradient-to-b from-white/15 to-white/0 text-chalk"
+    : "border-teal/20 bg-gradient-to-b from-teal/5 to-white text-deep";
 const cap = tone === "dark" ? "text-mist/65" : "text-slate";
-const colon = tone === "dark" ? "text-brass" : "text-brass";
+const colon = tone === "dark" ? "text-white" : "text-deep";
 ---
 
 <div
@@ -43,7 +43,7 @@ const colon = tone === "dark" ? "text-brass" : "text-brass";
         <span class="xv-cd-glow pointer-events-none absolute inset-0 rounded-2xl" aria-hidden="true"></span>
         <span
           data-unit={u.key}
-          class="xv-cd-digit relative block font-display text-2xl font-bold tabular-nums text-brass sm:text-4xl"
+          class="xv-cd-digit relative block font-display text-2xl font-bold tabular-nums text-current sm:text-4xl"
         >
           {String(u.value).padStart(2, "0")}
         </span>
@@ -64,10 +64,10 @@ const colon = tone === "dark" ? "text-brass" : "text-brass";
 
 <style>
   .xv-cd-box {
-    --xv-glow-45: color-mix(in srgb, var(--color-brass) 45%, transparent);
-    --xv-glow-55: color-mix(in srgb, var(--color-brass) 55%, transparent);
-    --xv-glow-35: color-mix(in srgb, var(--color-brass) 35%, transparent);
-    --xv-glow-75: color-mix(in srgb, var(--color-brass) 75%, transparent);
+    --xv-glow-45: rgba(255, 255, 255, 0.45);
+    --xv-glow-55: rgba(255, 255, 255, 0.55);
+    --xv-glow-35: rgba(255, 255, 255, 0.35);
+    --xv-glow-75: rgba(255, 255, 255, 0.75);
     box-shadow:
       0 0 0 1px rgba(0, 0, 0, 0),
       0 0 24px -6px var(--xv-glow-55),
@@ -76,21 +76,17 @@ const colon = tone === "dark" ? "text-brass" : "text-brass";
   }
 
   .xv-cd-glow {
-    background: radial-gradient(
-      circle at 50% 20%,
-      color-mix(in srgb, var(--color-brass) 22%, transparent),
-      transparent 70%
-    );
+    background: radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.22), transparent 70%);
   }
 
   .xv-cd-digit {
     text-shadow:
-      0 0 16px color-mix(in srgb, var(--color-brass) 70%, transparent),
-      0 0 2px color-mix(in srgb, var(--color-brass) 90%, transparent);
+      0 0 16px rgba(255, 255, 255, 0.7),
+      0 0 2px rgba(255, 255, 255, 0.9);
   }
 
   .xv-cd-colon {
-    text-shadow: 0 0 12px color-mix(in srgb, var(--color-brass) 70%, transparent);
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.7);
     animation: xv-cd-blink 1.6s steps(1, end) infinite;
   }
 
