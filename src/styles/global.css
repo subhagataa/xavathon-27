@@ -21,8 +21,8 @@
    (--color-teal  ->  bg-teal / text-teal / border-teal)
 --------------------------------------------------------------- */
 @theme {
-  --color-dark: #0E1A3D;
-  --color-deep: #0B192E;
+  --color-dark: #121e38;
+  --color-deep: #12223c;
   --color-teal: #2e4d69;
   --color-mist: #c9d4dd;
   --color-chalk: #f4f6f8;
