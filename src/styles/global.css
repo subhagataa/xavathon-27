@@ -220,35 +220,41 @@ body {
 
 /* ---------------------------------------------------------------
    Hero slideshow — 3 stacked photos, auto-cycling, no controls.
-   All three run the same keyframe on the same 24s duration; each
-   one's --xv-slide-delay (0s/8s/16s) offsets it into its own slot.
+   All three run the same keyframe on the same --xv-hero-duration,
+   each one's --xv-slide-delay offsets it into its own slot.
 
-   True dissolve, not a fade-to-background-then-fade-in: each slide
-   holds at full opacity right up to the slot boundary, THEN spends
-   the next 2s fading 1 -> 0 — which is the exact same 2s window the
-   next slide (delay +8s) spends fading 0 -> 1 from its own 0%. Both
-   ramps are linear over an identical window, so their opacities sum
-   to 1 for the whole crossfade: it's always a blend of two photos,
-   never a dip to bare background color.
+   Blur transition: each slide holds sharp and fully visible through
+   its slot, then over the shared handoff window it fades out WHILE
+   blurring, exactly as the next slide (delay +1/3 duration) fades in
+   WHILE sharpening over that same window, from its own 0%. Because
+   both ramps are linear and mirrored across the identical window,
+   opacity always sums to 1 — it's a blur-dissolve blend of two
+   photos, never a dip to bare background color.
 --------------------------------------------------------------- */
+:root {
+  --xv-hero-duration: 12s; /* was 24s — lower = faster cycling */
+}
+
 @keyframes xv-hero-fade {
-  0%      { opacity: 0; }
-  8.33%   { opacity: 1; }
-  33.33%  { opacity: 1; }
-  41.67%  { opacity: 0; }
-  100%    { opacity: 0; }
+  0%      { opacity: 0; filter: blur(14px); }
+  8.33%   { opacity: 1; filter: blur(0px); }
+  33.33%  { opacity: 1; filter: blur(0px); }
+  41.67%  { opacity: 0; filter: blur(14px); }
+  100%    { opacity: 0; filter: blur(14px); }
 }
 
 .xv-hero-slide {
   opacity: 0;
-  animation: xv-hero-fade 24s ease-in-out infinite;
+  animation: xv-hero-fade var(--xv-hero-duration) ease-in-out infinite;
   animation-delay: var(--xv-slide-delay, 0s);
+  will-change: opacity, filter;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .xv-hero-slide {
     animation: none;
     opacity: 0;
+    filter: none;
   }
   .xv-hero-slide:first-child {
     opacity: 1;
