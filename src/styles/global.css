@@ -223,23 +223,24 @@ Hero slideshow — 3 stacked photos, auto-cycling, no controls.
 All three run the same keyframe on the same 18s duration; each
 one's --xv-slide-delay (0s/6s/12s) offsets it into its own slot.
 Blur transition: each slide holds sharp and fully visible through
-its slot, then over the shared 1.5s handoff window it fades out
-WHILE blurring, exactly as the next slide (delay +6s) fades in
-WHILE sharpening over that same window, from its own 0%. Because
-both ramps are linear and mirrored across the identical window,
-opacity always sums to 1 — it's a blur-dissolve blend of two
-photos, never a dip to bare background color.
+its slot, then over a 2s handoff window it fades out WHILE
+blurring, exactly as the next slide (delay +6s) fades in WHILE
+sharpening over that same window, from its own 0%. Using exact
+thirds (33.3333%) and linear timing keeps the crossfade math
+exact — opacity always sums to 1, so there is never a moment
+with zero images visible; it loops from image 3 straight back
+into image 1 forever.
 --------------------------------------------------------------- */
 @keyframes xv-hero-fade {
-  0%     { opacity: 0; filter: blur(24px); }
-  8.33%  { opacity: 1; filter: blur(0px); }
-  33.33% { opacity: 1; filter: blur(0px); }
-  41.67% { opacity: 0; filter: blur(24px); }
-  100%   { opacity: 0; filter: blur(24px); }
+  0%        { opacity: 0; filter: blur(24px); }
+  11.1111%  { opacity: 1; filter: blur(0px); }
+  33.3333%  { opacity: 1; filter: blur(0px); }
+  44.4444%  { opacity: 0; filter: blur(24px); }
+  100%      { opacity: 0; filter: blur(24px); }
 }
 .xv-hero-slide {
   opacity: 0;
-  animation: xv-hero-fade 18s ease-in-out infinite;
+  animation: xv-hero-fade 18s linear infinite;
   animation-delay: var(--xv-slide-delay, 0s);
   will-change: opacity, filter;
 }
