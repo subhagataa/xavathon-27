@@ -20,28 +20,105 @@ const units = [
   { key: "secs", label: "seconds", value: initial.secs },
 ];
 
-const box = tone === "dark" ? "border-mist/25 bg-mist/10 text-chalk" : "border-teal/20 bg-white text-deep";
+const box =
+  tone === "dark"
+    ? "border-brass/30 bg-gradient-to-b from-mist/15 to-white/0 text-chalk"
+    : "border-brass/40 bg-gradient-to-b from-teal/5 to-white text-deep";
 const cap = tone === "dark" ? "text-mist/65" : "text-slate";
+const colon = tone === "dark" ? "text-brass" : "text-brass";
 ---
 
 <div
-  class="xv-countdown flex gap-2 sm:gap-3"
+  class="xv-countdown flex items-start gap-1.5 sm:gap-2.5"
   data-target={event.date}
   role="timer"
   aria-label={`Time remaining until ${event.dateLabel}`}
 >
-  {units.map((u) => (
-    <div class={`flex-1 border px-2 py-3 text-center sm:px-4 sm:py-4 ${box}`}>
-      <span
-        data-unit={u.key}
-        class="block font-display text-2xl font-bold tabular-nums sm:text-4xl"
+  {units.map((u, i) => (
+    <>
+      <div
+        class={`xv-cd-box relative flex-1 overflow-hidden rounded-2xl border px-2 py-3 text-center backdrop-blur-sm sm:px-4 sm:py-4 ${box}`}
       >
-        {String(u.value).padStart(2, "0")}
-      </span>
-      <span class={`mt-1 block text-[11px] sm:text-xs ${cap}`}>{u.label}</span>
-    </div>
+        <!-- glow wash sitting behind the digits -->
+        <span class="xv-cd-glow pointer-events-none absolute inset-0 rounded-2xl" aria-hidden="true"></span>
+        <span
+          data-unit={u.key}
+          class="xv-cd-digit relative block font-display text-2xl font-bold tabular-nums text-brass sm:text-4xl"
+        >
+          {String(u.value).padStart(2, "0")}
+        </span>
+        <span class={`relative mt-1 block text-[11px] sm:text-xs ${cap}`}>{u.label}</span>
+      </div>
+
+      {i < units.length - 1 && (
+        <span
+          aria-hidden="true"
+          class={`xv-cd-colon self-start pt-2 font-display text-2xl font-bold sm:pt-3 sm:text-4xl ${colon}`}
+        >
+          :
+        </span>
+      )}
+    </>
   ))}
 </div>
+
+<style>
+  .xv-cd-box {
+    box-shadow:
+      0 0 0 1px rgba(0, 0, 0, 0),
+      0 0 24px -6px theme(colors.brass / 55%),
+      0 0 2px 0 theme(colors.brass / 40%) inset;
+    animation: xv-cd-pulse 3.2s ease-in-out infinite;
+  }
+
+  .xv-cd-glow {
+    background: radial-gradient(circle at 50% 20%, theme(colors.brass / 22%), transparent 70%);
+  }
+
+  .xv-cd-digit {
+    text-shadow: 0 0 16px theme(colors.brass / 70%), 0 0 2px theme(colors.brass / 90%);
+  }
+
+  .xv-cd-colon {
+    text-shadow: 0 0 12px theme(colors.brass / 70%);
+    animation: xv-cd-blink 1.6s steps(1, end) infinite;
+  }
+
+  @keyframes xv-cd-pulse {
+    0%,
+    100% {
+      box-shadow:
+        0 0 24px -6px theme(colors.brass / 45%),
+        0 0 2px 0 theme(colors.brass / 35%) inset;
+    }
+    50% {
+      box-shadow:
+        0 0 34px -4px theme(colors.brass / 75%),
+        0 0 3px 0 theme(colors.brass / 55%) inset;
+    }
+  }
+
+  @keyframes xv-cd-blink {
+    0%,
+    45% {
+      opacity: 1;
+    }
+    50%,
+    95% {
+      opacity: 0.35;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .xv-cd-box,
+    .xv-cd-colon {
+      animation: none;
+    }
+  }
+</style>
 
 <script>
   for (const el of document.querySelectorAll(".xv-countdown")) {
