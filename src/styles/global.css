@@ -21,8 +21,8 @@
    (--color-teal  ->  bg-teal / text-teal / border-teal)
 --------------------------------------------------------------- */
 @theme {
-  --color-deep: #16273a;
-  --color-teal: #2e4d69;
+  ---color-deep: #0b1d3f;   /* was #16273a — deep sapphire, ~2x the saturation */
+  --color-teal: #1e5fb8;   /* was #2e4d69 — vivid royal blue, does the "bright" work */
   --color-mist: #c9d4dd;
   --color-chalk: #f4f6f8;
   --color-brass: #d9a43c;
