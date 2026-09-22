@@ -1,0 +1,42 @@
+---
+import { races } from "../data/xavathon";
+interface Props { tone?: "light" | "dark" }
+const { tone = "light" } = Astro.props;
+
+const card = tone === "dark" ? "border-mist/25 bg-mist/[0.06] text-chalk" : "border-teal/20 bg-white text-deep";
+const muted = tone === "dark" ? "text-mist/80" : "text-slate";
+const rule = tone === "dark" ? "border-mist/20" : "border-teal/15";
+const accent = tone === "dark" ? "text-brass" : "text-teal";
+---
+
+<div class="grid gap-5 md:grid-cols-3">
+  {races.map((r) => (
+    <article class={`xv-reveal flex flex-col border p-7 ${card}`}>
+      <p class={`font-display text-4xl font-bold ${accent}`}>{r.distance}</p>
+      <h3 class="font-display mt-1 text-xl font-semibold">{r.name}</h3>
+      <p class={`mt-3 flex-1 text-sm leading-relaxed ${muted}`}>{r.summary}</p>
+
+      <dl class={`mt-5 space-y-1.5 border-t pt-4 text-sm ${rule}`}>
+        <div class="flex justify-between gap-3">
+          <dt class={muted}>Flag-off</dt>
+          <dd class="font-semibold">{r.flagOff}</dd>
+        </div>
+        <div class="flex justify-between gap-3">
+          <dt class={muted}>Entry fee</dt>
+          <dd class="font-semibold">{r.fee}</dd>
+        </div>
+        <div class="flex justify-between gap-3">
+          <dt class={muted}>Minimum age</dt>
+          <dd class="font-semibold">{r.minAge}</dd>
+        </div>
+      </dl>
+
+      <a
+        href={`/races#${r.slug}`}
+        class={`mt-5 font-display text-sm font-semibold underline underline-offset-4 ${accent}`}
+      >
+        Full details for the {r.distance}
+      </a>
+    </article>
+  ))}
+</div>

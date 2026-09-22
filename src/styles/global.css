@@ -1,0 +1,218 @@
+@import url("https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&display=swap");
+@import "tailwindcss";
+
+/* Norwester — free display face (SIL OFL), served from Fontsource's
+   jsDelivr CDN. Poster-style, caps-led, one weight only. */
+@font-face {
+  font-family: "Norwester";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src:
+    url("https://cdn.jsdelivr.net/fontsource/fonts/norwester@latest/latin-400-normal.woff2") format("woff2"),
+    url("https://cdn.jsdelivr.net/fontsource/fonts/norwester@latest/latin-400-normal.woff") format("woff");
+}
+
+/* ---------------------------------------------------------------
+   XAVATHON 2027 — design tokens
+   Deep navy through to chalk white, lifted from the official
+   event poster, with brass held back for medals and awards.
+   Tailwind v4: tokens here become utilities automatically
+   (--color-teal  ->  bg-teal / text-teal / border-teal)
+--------------------------------------------------------------- */
+@theme {
+  --color-deep: #16273a;
+  --color-teal: #2e4d69;
+  --color-mist: #c9d4dd;
+  --color-chalk: #f4f6f8;
+  --color-brass: #d9a43c;
+  --color-slate: #4c6072;
+
+  /* Norwester is the real deal (SIL OFL, free). Futura itself is a
+     paid Monotype face with no legal free-CDN source, so Jost — a
+     geometric sans explicitly modelled on the same Kabel/Futura
+     family — stands in for it here; swap it for a licensed Futura
+     file if/when the college has one. */
+  --font-display: "Norwester", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-body: "Jost", "Futura", "Century Gothic", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+:root {
+  /* lets <details> animate from 0 to auto height with no JS */
+  interpolate-size: allow-keywords;
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-chalk);
+  color: var(--color-deep);
+  font-family: var(--font-body);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Norwester is a poster/display face — one weight, caps-led — so
+   every title and button set in .font-display is run in caps with
+   a touch of extra tracking rather than a synthetic bold. */
+.font-display,
+.font-display.font-bold,
+.font-display.font-semibold {
+  font-family: var(--font-display);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.015em;
+}
+
+/* Visible keyboard focus everywhere */
+:focus-visible {
+  outline: 2px solid var(--color-teal);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ---------------------------------------------------------------
+   Keyframes
+--------------------------------------------------------------- */
+
+/* A print pressing into the ground and staying there */
+@keyframes xv-step {
+  from { opacity: 0; transform: translateY(10px) rotate(var(--rot, 0deg)) scaleX(var(--flip, 1)) scale(0.9); }
+  to   { opacity: var(--step-opacity, 0.85); transform: translateY(0) rotate(var(--rot, 0deg)) scaleX(var(--flip, 1)) scale(1); }
+}
+
+/* A print appearing, holding, then fading — staggered along the road
+   so the trail advances left to right and loops. */
+@keyframes xv-walk {
+  0%        { opacity: 0; transform: rotate(var(--rot, 0deg)) scaleX(var(--flip, 1)) scale(0.82); }
+  8%        { opacity: var(--step-opacity, 0.8); transform: rotate(var(--rot, 0deg)) scaleX(var(--flip, 1)) scale(1); }
+  62%       { opacity: var(--step-opacity, 0.8); }
+  88%, 100% { opacity: 0; transform: rotate(var(--rot, 0deg)) scaleX(var(--flip, 1)) scale(1); }
+}
+
+@keyframes xv-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes xv-shine {
+  from { transform: translateX(-120%) skewX(-18deg); }
+  to   { transform: translateX(320%) skewX(-18deg); }
+}
+
+@keyframes xv-reveal {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ---------------------------------------------------------------
+   Components / utilities
+--------------------------------------------------------------- */
+
+/* Footprints that step in once and stay (the podium approach) */
+.xv-print {
+  opacity: 0;
+  animation: xv-step 0.5s ease-out forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+/* Footprints crossing the road, looping left to right.
+   The wrapper does the positioning so the keyframes own the transform. */
+.xv-walk {
+  opacity: 0;
+  animation: xv-walk 6s linear infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+/* Sponsor marquee: track holds the list twice, so -50% loops seamlessly */
+.xv-marquee {
+  display: flex;
+  width: max-content;
+  animation: xv-marquee 32s linear infinite;
+}
+
+.xv-marquee-mask {
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.xv-marquee-mask:hover .xv-marquee,
+.xv-marquee-mask:focus-within .xv-marquee {
+  animation-play-state: paused;
+}
+
+/* Medal shine sweep — user-triggered only */
+.xv-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.55), transparent);
+  transform: translateX(-120%) skewX(-18deg);
+}
+
+.xv-shine:hover::after,
+.xv-shine:focus-visible::after {
+  animation: xv-shine 0.9s ease-out;
+}
+
+/* Native <details> open/close animation, zero JS */
+.xv-faq::details-content {
+  block-size: 0;
+  overflow: hidden;
+  transition: block-size 0.32s ease, content-visibility 0.32s allow-discrete;
+}
+
+.xv-faq[open]::details-content {
+  block-size: auto;
+}
+
+.xv-faq[open] .xv-faq-plus {
+  transform: rotate(135deg);
+}
+
+/* Scroll-driven reveals. Progressive enhancement only: without
+   animation-timeline support the content is simply already visible. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .xv-reveal {
+      animation: xv-reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 8% cover 26%;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { scroll-behavior: auto; }
+  .xv-print,
+  .xv-walk,
+  .xv-marquee,
+  .xv-shine::after {
+    animation: none !important;
+  }
+  .xv-print,
+  .xv-walk {
+    opacity: var(--step-opacity, 0.8);
+    transform: rotate(var(--rot, 0deg)) scaleX(var(--flip, 1));
+  }
+}
+
+/* Logo gently zooming in and out, glowing at the peak */
+@keyframes xv-float-glow {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 0px rgb(217 164 60 / 0));
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 18px rgb(217 164 60 / 0.55));
+  }
+}
+
+.xv-float {
+  animation: xv-float-glow 4.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xv-float {
+    animation: none;
+  }
+}

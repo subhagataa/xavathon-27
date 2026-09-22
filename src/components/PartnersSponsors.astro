@@ -1,0 +1,48 @@
+---
+import SectionHead from "./SectionHead.astro";
+import { tiers, eventEmail } from "../data/xavathon";
+
+/* This page shows only who our partners are. Once logos come in,
+   drop each partner's { name, logo } into its tier's `partners`
+   array in data/xavathon.ts — the <img> below reads from there.
+   Until then every open slot renders as a plain placeholder tile.
+   All tiers are pooled into one flat wall of logos — no separate
+   section per tier. */
+const allSlots = tiers.flatMap((t) =>
+  Array.from({ length: t.slots }, (_, i) => t.partners[i] ?? null)
+);
+---
+
+<section id="sponsors" class="bg-deep py-20 text-chalk sm:py-28">
+  <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+    <SectionHead as="h1" tone="dark" title="Sponsors" intro="The organisations behind Xavathon 2027." />
+
+    <!-- Logos, side by side — every tier pooled into one wall -->
+    <div class="mt-14 flex flex-wrap gap-4">
+      {allSlots.map((p) => (
+        <div class="xv-reveal grid h-24 w-48 place-items-center border border-mist/20 bg-white p-4">
+          {p ? (
+            <img src={p.logo} alt={p.name} class="max-h-full max-w-full object-contain" />
+          ) : (
+            <span class="text-xs text-slate/50">Logo to be announced</span>
+          )}
+        </div>
+      ))}
+    </div>
+
+    <!-- Become a partner -->
+    <div id="become-a-partner" class="xv-reveal mt-16 border border-mist/20 p-8 text-center sm:p-12">
+      <h3 class="font-display text-2xl font-bold sm:text-3xl">Want to see your logo here?</h3>
+      <p class="mx-auto mt-3 max-w-xl leading-relaxed text-mist/85">
+        To become a sponsor of Xavathon 2027, write to us and the team will get back to you with
+        tiers and availability.
+      </p>
+      <a
+        href={`mailto:${eventEmail}?subject=Xavathon%202027%20partnership`}
+        class="mt-7 inline-flex items-center bg-brass px-7 py-3.5 font-display font-semibold text-deep transition-colors hover:bg-chalk"
+      >
+        {eventEmail}
+      </a>
+    </div>
+  </div>
+</section>

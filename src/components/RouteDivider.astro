@@ -1,0 +1,46 @@
+---
+/* A trail of footprints advancing left to right, each one fading in
+   a beat after the one behind it and fading out once the trail has
+   passed — so nothing but CSS is doing the walking. Feet sit on a
+   flat, straight line (no road underneath). */
+interface Props { tone?: "light" | "dark"; class?: string }
+const { tone = "light", class: klass = "" } = Astro.props;
+
+const feet = tone === "dark" ? "text-mist/70" : "text-teal/55";
+
+const COUNT = 22;
+const prints = Array.from({ length: COUNT }, (_, i) => {
+  const leftPct = 3 + (i * 91) / (COUNT - 1);
+  const side = i % 2 === 0 ? -1 : 1; // alternate left and right feet
+
+  return {
+    left: leftPct.toFixed(2),
+    top: (50 + side * 6.5).toFixed(2), // step either side of the centre line
+    flip: side,
+    delay: (i * 0.2).toFixed(2),
+  };
+});
+---
+
+<div class={`relative overflow-hidden ${klass}`} aria-hidden="true">
+  <div class={`absolute inset-0 ${feet}`}>
+    {prints.map((p) => (
+      <span
+        class="absolute -translate-x-1/2 -translate-y-1/2"
+        style={`left:${p.left}%;top:${p.top}%`}
+      >
+        <svg
+          viewBox="0 0 24 40"
+          class="xv-walk w-2.5"
+          style={`--delay:${p.delay}s;--rot:90deg;--flip:${p.flip};--step-opacity:0.9`}
+        >
+          <path
+            fill="currentColor"
+            d="M6 27c-2-5-2-11 0-16C7.5 7 10.5 4 13.5 4c3.5 0 5 3 4.6 7.5-.3 3.3-1.6 5.7-1.6 9 0 2.3.8 3.7.8 5.6 0 3.2-2.3 5.2-5.6 5.2S7.3 29.7 6 27Z"
+          />
+          <ellipse fill="currentColor" cx="11.8" cy="35" rx="4.2" ry="3.4" />
+        </svg>
+      </span>
+    ))}
+  </div>
+</div>

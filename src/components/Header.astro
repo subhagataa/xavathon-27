@@ -1,0 +1,117 @@
+---
+import { nav } from "../data/xavathon";
+
+/* Active state from the current URL, so nothing needs passing in. */
+const here = Astro.url.pathname.replace(/\/$/, "") || "/";
+const isOn = (href: string) => here === href || (href !== "/" && here.startsWith(href));
+---
+
+<!-- No header bar anywhere on the site. This is the only piece of
+     chrome that's ever on screen: one floating button, fixed to the
+     corner of the viewport on every page, including over the
+     full-screen hero. Everything else lives behind it. -->
+<div class="xv-menu fixed right-4 top-4 z-[70] sm:right-6 sm:top-6" data-xv-menu>
+  <button
+    type="button"
+    data-xv-toggle
+    aria-expanded="false"
+    aria-controls="xv-menu-panel"
+    aria-label="Open menu"
+    class="grid h-12 w-12 place-items-center rounded-full bg-deep/85 text-chalk shadow-lg ring-1 ring-chalk/15 backdrop-blur transition-transform hover:scale-105 sm:h-14 sm:w-14"
+  >
+    <svg data-xv-icon-open viewBox="0 0 20 20" class="h-5 w-5" aria-hidden="true">
+      <path d="M2.5 5.5h15M2.5 10h15M2.5 14.5h15" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+    </svg>
+    <svg data-xv-icon-close viewBox="0 0 20 20" class="hidden h-5 w-5" aria-hidden="true">
+      <path d="M4 4l12 12M16 4L4 16" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" />
+    </svg>
+  </button>
+
+  <nav
+    id="xv-menu-panel"
+    data-xv-panel
+    aria-label="Main"
+    class="pointer-events-none absolute right-0 top-full z-[65] mt-3 w-72 origin-top-right scale-95 flex-col justify-between bg-deep px-5 pb-5 pt-5 text-chalk opacity-0 shadow-2xl backdrop-blur transition-all duration-200 ease-out sm:w-80 sm:px-6 sm:pt-6"
+  >
+    <ul class="grid gap-0.5 py-1">
+      {nav.map((l, i) => (
+        <li style={`transition-delay:${i * 25}ms`} data-xv-item class="translate-y-2 opacity-0 transition-all duration-200 ease-out">
+          <a
+            href={l.href}
+            aria-current={isOn(l.href) ? "page" : undefined}
+            class={`block rounded-lg px-2 py-2 text-lg leading-tight transition-colors hover:text-brass ${
+              isOn(l.href) ? "text-brass" : "text-chalk"
+            }`}
+          >
+            {l.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</div>
+
+<script>
+  function setup(root: Element) {
+    const toggle = root.querySelector("[data-xv-toggle]") as HTMLButtonElement | null;
+    const panel = root.querySelector("[data-xv-panel]") as HTMLElement | null;
+    const iconOpen = root.querySelector("[data-xv-icon-open]");
+    const iconClose = root.querySelector("[data-xv-icon-close]");
+    const items = Array.from(root.querySelectorAll("[data-xv-item]"));
+    if (!toggle || !panel) return;
+
+    let open = false;
+
+    function render() {
+      toggle!.setAttribute("aria-expanded", String(open));
+      toggle!.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      iconOpen?.classList.toggle("hidden", open);
+      iconClose?.classList.toggle("hidden", !open);
+
+      if (open) {
+        panel!.classList.remove("pointer-events-none", "opacity-0", "scale-95");
+        panel!.classList.add("flex", "scale-100");
+        items.forEach((el) => el.classList.remove("opacity-0", "translate-y-2"));
+      } else {
+        panel!.classList.add("opacity-0", "scale-95");
+        panel!.classList.remove("scale-100");
+        items.forEach((el) => el.classList.add("opacity-0", "translate-y-2"));
+        window.setTimeout(() => {
+          if (!open) {
+            panel!.classList.add("pointer-events-none");
+            panel!.classList.remove("flex");
+          }
+        }, 200);
+      }
+    }
+
+    toggle.addEventListener("click", (e) => {
+      e.stopPropagation();
+      open = !open;
+      render();
+    });
+
+    panel.querySelectorAll("a").forEach((a) =>
+      a.addEventListener("click", () => {
+        open = false;
+        render();
+      })
+    );
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && open) {
+        open = false;
+        render();
+      }
+    });
+
+    document.addEventListener("click", (e) => {
+      if (open && !root.contains(e.target as Node)) {
+        open = false;
+        render();
+      }
+    });
+  }
+
+  document.querySelectorAll("[data-xv-menu]").forEach(setup);
+</script>

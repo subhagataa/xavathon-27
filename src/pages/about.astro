@@ -1,0 +1,410 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionHead from "../components/SectionHead.astro";
+import GreenInitiatives from "../components/GreenInitiatives.astro";
+import Committee from "../components/Committee.astro";
+import {
+  event,
+  principalMessage,
+  whatIsXavathon,
+  objectives,
+  whyCollegeRun,
+  impact,
+  aboutCollege,
+  charity,
+  eventEmail,
+} from "../data/xavathon";
+---
+
+<BaseLayout
+  title="About Xavathon 2027 | St. Xavier's College, Kolkata"
+  description="The story behind Xavathon — a student-organised mini marathon in Kolkata, its vision, objectives and sustainability commitments."
+>
+  <!-- Page head -->
+  <section class="bg-deep py-16 text-chalk sm:py-20">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <p class="font-display text-brass">{event.edition}</p>
+      <h1 class="font-display mt-3 text-4xl font-bold leading-tight sm:text-6xl">About Xavathon</h1>
+      <p class="mt-5 max-w-2xl text-lg leading-relaxed text-mist/85">
+        A race organised by undergraduates, run through the middle of Kolkata, on the condition that
+        it leaves the road cleaner than it found it.
+      </p>
+    </div>
+  </section>
+
+  <!-- Double line under "About Xavathon" — no footprint trail here -->
+  <div class="bg-deep py-3">
+    <div class="mx-auto max-w-[90rem] space-y-1.5 px-5 sm:px-8">
+      <div class="border-t border-mist/20"></div>
+      <div class="border-t border-mist/20"></div>
+    </div>
+  </div>
+
+  <!-- Principal's message -->
+  <section class="bg-deep py-20 text-chalk sm:py-24">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <div class="xv-reveal grid overflow-hidden border border-mist/20 bg-white lg:grid-cols-[1fr_1.6fr]">
+        <!-- Photo, full-bleed -->
+        <div class="min-h-[22rem] lg:min-h-full">
+          <img
+            src="/images/principal.webp"
+            alt={principalMessage.name}
+            class="h-full w-full object-cover"
+          />
+        </div>
+
+                <!-- Words -->
+        <div class="p-8 sm:p-12">
+          <p class="font-display text-sm font-bold uppercase tracking-[0.18em] text-brass">
+            Words of Inspiration
+          </p>
+          <h2 class="font-display mt-2 text-2xl font-bold text-deep sm:text-3xl">
+            Message from the Father Principal
+          </h2>
+
+          <span aria-hidden="true" class="font-display mt-6 block text-7xl leading-none text-brass sm:text-8xl">“</span>
+
+          <p class="-mt-3 font-semibold leading-relaxed text-deep" set:html={principalMessage.greeting} />
+
+          <div class="mt-4 space-y-4">
+            {principalMessage.body.map((p) => (
+              <p class="leading-relaxed text-deep/90" set:html={p} />
+            ))}
+          </div>
+
+          <div class="flex justify-end">
+            <span aria-hidden="true" class="font-display -mt-2 text-7xl leading-none text-brass sm:text-8xl">”</span>
+          </div>
+
+          <div class="mt-8 border-t border-teal/15 pt-5">
+            <p class="font-display font-bold text-deep">{principalMessage.name}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Single line -->
+  <div class="bg-deep py-3">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <div class="border-t border-mist/20"></div>
+    </div>
+  </div>
+
+  <!-- What is Xavathon -->
+  <section class="bg-deep pb-20 pt-14 text-chalk sm:pb-24">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <div class="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
+        <div class="xv-reveal">
+          <div class="border-b border-mist/20 pb-5">
+            <SectionHead tone="dark" title="What is Xavathon?" />
+          </div>
+          <div class="mt-6 space-y-4">
+            {whatIsXavathon.map((p) => (
+              <p class="max-w-[64ch] leading-relaxed text-mist/85">{p}</p>
+            ))}
+          </div>
+        </div>
+
+        <div class="xv-reveal self-start border border-mist/20 p-8">
+          <h3 class="font-display text-xl font-bold">Xavathon 2027 — {event.edition}</h3>
+          <div class="mt-4 border-b border-mist/15"></div>
+          <dl class="mt-1 divide-y divide-mist/15 text-sm">
+            <div class="flex justify-between gap-4 py-3">
+              <dt class="text-mist/65">Theme</dt>
+              <dd class="text-right font-semibold text-brass">{event.tagline}</dd>
+            </div>
+            <div class="flex justify-between gap-4 py-3">
+              <dt class="text-mist/65">Date</dt>
+              <dd class="text-right font-semibold">{event.dateLabel}</dd>
+            </div>
+            <div class="flex justify-between gap-4 py-3">
+              <dt class="text-mist/65">Distances</dt>
+              <dd class="text-right font-semibold">3, 5 and 10 KM</dd>
+            </div>
+            <div class="flex justify-between gap-4 py-3">
+              <dt class="text-mist/65">Start &amp; finish</dt>
+              <dd class="text-right font-semibold">College gate, Park Street</dd>
+            </div>
+            <div class="flex justify-between gap-4 py-3">
+              <dt class="text-mist/65">Expected field</dt>
+              <dd class="text-right font-semibold">{event.expected} runners</dd>
+            </div>
+          </dl>
+          <p class="mt-5 border-t border-mist/15 pt-4 text-xs leading-relaxed text-mist/60">
+            The second edition runs the 2026 course with a 10 KM added, and a waste target of near
+            zero.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Single line -->
+  <div class="bg-deep py-3">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <div class="border-t border-mist/20"></div>
+    </div>
+  </div>
+
+  <!-- Vision & objectives -->
+  <section class="bg-deep py-20 text-chalk sm:py-24">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <div class="border-b border-mist/20 pb-5">
+        <SectionHead
+          tone="dark"
+          title="Vision and objectives"
+          intro="Four things this event is trying to do. Each one is measurable, and we publish how we did."
+        />
+      </div>
+      <div class="mt-12 grid gap-px overflow-hidden border border-mist/20 bg-mist/20 sm:grid-cols-2">
+        {objectives.map((o) => (
+          <div class="bg-deep p-7 sm:p-8">
+            <h3 class="font-display text-lg font-semibold text-chalk">{o.head}</h3>
+            <p class="mt-2 max-w-[48ch] leading-relaxed text-mist/80">{o.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Single line -->
+  <div class="bg-deep py-3">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <div class="border-t border-mist/20"></div>
+    </div>
+  </div>
+
+  <!-- Why a college-organised marathon -->
+  <section class="bg-deep py-20 text-chalk sm:py-24">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <div class="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
+        <div class="xv-reveal">
+          <div class="border-b border-mist/20 pb-5">
+            <SectionHead tone="dark" title={whyCollegeRun.head} />
+          </div>
+          <div class="mt-6 space-y-4">
+            {whyCollegeRun.body.map((p) => (
+              <p class="max-w-[62ch] leading-relaxed text-mist/85">{p}</p>
+            ))}
+          </div>
+        </div>
+
+        <div class="xv-reveal self-center">
+          <h3 class="font-display text-lg font-semibold text-brass">What the event moves</h3>
+          <dl class="mt-4 divide-y divide-mist/15 border-y border-mist/15">
+            {impact.map((i) => (
+              <div class="flex items-baseline gap-5 py-5">
+                <dd class="font-display text-3xl font-bold text-chalk">{i.figure}</dd>
+                <dt class="text-sm text-mist/75">{i.label}</dt>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Single line -->
+  <div class="bg-deep py-3">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <div class="border-t border-mist/20"></div>
+    </div>
+  </div>
+
+  <GreenInitiatives />
+
+  <!-- Single line -->
+  <div class="bg-deep py-3">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <div class="border-t border-mist/20"></div>
+    </div>
+  </div>
+
+  <!-- Running for a cause -->
+  <section class="bg-deep py-20 text-chalk sm:py-24">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <div class="border-b border-mist/20 pb-5">
+        <SectionHead tone="dark" title={charity.head} intro={charity.intro} />
+      </div>
+
+      <!-- The ₹100 split, and what it's added up to so far -->
+      <div class="xv-reveal mt-12 border border-mist/20 p-8 sm:p-10">
+        <div class="grid gap-10 sm:grid-cols-[1.3fr_1fr]">
+          <div>
+            <p class="font-display text-xs font-bold uppercase tracking-[0.18em] text-mist/55">
+              Every ₹100 contributed
+            </p>
+            <div class="mt-5 grid gap-6 sm:grid-cols-2">
+              <div>
+                <p class="font-display text-4xl font-bold text-brass">₹20</p>
+                <h3 class="font-display mt-1 text-sm font-semibold text-chalk">
+                  Environmental impact
+                </h3>
+                <p class="mt-1.5 max-w-[32ch] text-sm leading-relaxed text-mist/75">
+                  Plants and nurtures a native tree sapling.
+                </p>
+              </div>
+              <div>
+                <p class="font-display text-4xl font-bold text-brass">₹80</p>
+                <h3 class="font-display mt-1 text-sm font-semibold text-chalk">Social impact</h3>
+                <p class="mt-1.5 max-w-[32ch] text-sm leading-relaxed text-mist/75">
+                  Goes to a verified NGO partner or grassroots cause.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="border-t border-mist/15 pt-6 sm:border-l sm:border-t-0 sm:pl-10 sm:pt-0">
+            <p class="font-display text-3xl font-bold text-brass sm:text-4xl">₹1,00,000</p>
+            <p class="mt-1 text-xs font-semibold uppercase tracking-[0.16em] text-mist/60">
+              Raised so far
+            </p>
+            <dl class="mt-5 space-y-2 text-sm">
+              <div class="flex justify-between gap-4">
+                <dt class="text-mist/70">Saplings</dt>
+                <dd class="font-semibold text-mist/90">₹20,000</dd>
+              </div>
+              <div class="flex justify-between gap-4">
+                <dt class="text-mist/70">Cause partners</dt>
+                <dd class="font-semibold text-mist/90">₹80,000</dd>
+              </div>
+            </dl>
+            <p class="mt-5 border-t border-mist/15 pt-4 text-xs leading-relaxed text-mist/60">
+              100% verified, audited and documented by St. Xavier's College (Autonomous), Kolkata.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-8 grid gap-5 md:grid-cols-3">
+        {charity.causes.map((c) => (
+          <article class="xv-reveal rounded-2xl border border-mist/20 bg-white p-7">
+            <h3 class="font-display text-lg font-bold text-deep">{c.name}</h3>
+            <p class="mt-2.5 max-w-[46ch] text-sm leading-relaxed text-slate">{c.body}</p>
+          </article>
+        ))}
+      </div>
+
+      <div class="xv-reveal mt-8 grid gap-8 border border-mist/20 p-8 sm:p-10 lg:grid-cols-[1fr_1fr]">
+        <div>
+          <h3 class="font-display text-xl font-bold text-chalk">Ways to give</h3>
+          <ul class="mt-5 space-y-3 border-t border-mist/15 pt-5">
+            {charity.howToGive.map((h) => (
+              <li class="flex gap-3 text-sm leading-relaxed text-mist/85">
+                <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brass"></span>
+                {h}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div class="self-center">
+          <p class="font-display text-base font-semibold text-chalk">
+            Ready to leave your footprint?
+          </p>
+          <p class="mt-2 max-w-[46ch] text-sm leading-relaxed text-mist/80">
+            To contribute directly, or to bring your NGO on board as a Community Partner, write to
+            us.
+          </p>
+          <a
+            href={`mailto:${eventEmail}?subject=Xavathon%202027%20—%20Charity`}
+            class="mt-5 inline-flex items-center rounded-full bg-brass px-6 py-3 font-display font-semibold text-deep transition-colors hover:bg-chalk"
+          >
+            Contribute — {eventEmail}
+          </a>
+        </div>
+      </div>
+
+      <p class="mt-6 max-w-[70ch] text-xs leading-relaxed text-mist/60">{charity.note}</p>
+    </div>
+  </section>
+
+  <!-- Single line -->
+  <div class="bg-deep py-3">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <div class="border-t border-mist/20"></div>
+    </div>
+  </div>
+
+  <!-- Join the cause CTA -->
+  <section class="bg-deep py-20 text-center text-chalk sm:py-24">
+    <div class="mx-auto max-w-3xl px-5 sm:px-8">
+      <p class="font-display text-xs font-bold uppercase tracking-[0.18em] text-brass">
+        Join the cause • Xavathon 2027
+      </p>
+      <h2 class="font-display mt-3 text-2xl font-bold sm:text-3xl">
+        Run for health. Run for the planet. Run for community.
+      </h2>
+      <p class="mt-5 leading-relaxed text-mist/85">
+        Be part of Xavathon 2027 — every step and every contribution leaves two enduring
+        footprints, for people and for the environment.
+      </p>
+      <a
+        href="https://royatul031.github.io/college-web/#races"
+        class="mt-8 inline-block bg-brass px-8 py-3 font-display text-sm font-bold uppercase tracking-[0.1em] text-deep transition hover:opacity-90"
+      >
+        Support &amp; register
+      </a>
+
+      <p class="mt-10 border-t border-mist/15 pt-6 font-display text-lg font-semibold text-chalk">
+        The finish line is ours. The impact belongs to everyone after us.
+      </p>
+      <p class="mt-2 text-sm italic text-mist/70">
+        "Every contribution leaves two footprints — one for the planet, one for people."
+      </p>
+    </div>
+  </section>
+
+  <!-- Single line -->
+  <div class="bg-deep py-3">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <div class="border-t border-mist/20"></div>
+    </div>
+  </div>
+
+  <!-- About the college -->
+  <section class="bg-deep py-20 text-chalk sm:py-24">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <div class="grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-16">
+        <div class="xv-reveal">
+          <div class="border-b border-mist/20 pb-5">
+            <SectionHead tone="dark" title="About St. Xavier's College, Kolkata" />
+          </div>
+          <div class="mt-6 space-y-4">
+            {aboutCollege.map((p) => (
+              <p class="max-w-[62ch] leading-relaxed text-mist/85">{p}</p>
+            ))}
+          </div>
+        </div>
+
+        <div class="xv-reveal self-center border border-mist/20 p-8">
+          <dl class="divide-y divide-mist/15">
+            <div class="flex justify-between gap-4 pb-3">
+              <dt class="text-mist/70">Founded</dt>
+              <dd class="font-display font-semibold text-chalk">1860</dd>
+            </div>
+            <div class="flex justify-between gap-4 py-3">
+              <dt class="text-mist/70">Autonomy granted</dt>
+              <dd class="font-display font-semibold text-chalk">2006</dd>
+            </div>
+            <div class="flex justify-between gap-4 py-3">
+              <dt class="text-mist/70">University status</dt>
+              <dd class="font-display font-semibold text-chalk">2017</dd>
+            </div>
+            <div class="flex justify-between gap-4 pt-3">
+              <dt class="text-mist/70">Address</dt>
+              <dd class="text-right font-semibold text-chalk">30, Mother Teresa Sarani</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Single line -->
+  <div class="bg-deep py-3">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <div class="border-t border-mist/20"></div>
+    </div>
+  </div>
+
+  <Committee />
+</BaseLayout>

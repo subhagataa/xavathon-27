@@ -1,0 +1,33 @@
+---
+/* Placeholder grid. Drop in a real embed (Behold, SnapWidget, Elfsight
+   or the Instagram Basic Display API) where marked — the tiles below
+   keep the layout honest until then. */
+const handle = "@xavathon";
+const tiles = 6;
+---
+
+<section class="bg-chalk py-20 sm:py-24">
+  <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+    <div class="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <h2 class="font-display text-2xl font-bold text-deep sm:text-3xl">From the start line</h2>
+        <p class="mt-2 text-slate">Training posts, route reveals and race-week notices.</p>
+      </div>
+      <a
+        href="https://instagram.com/"
+        class="border border-teal/30 px-5 py-2.5 font-display text-sm font-semibold text-teal transition-colors hover:bg-mist/30"
+      >
+        Follow {handle}
+      </a>
+    </div>
+
+    <!-- INSTAGRAM EMBED GOES HERE -->
+    <div class="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+      {Array.from({ length: tiles }).map(() => (
+        <div class="grid aspect-square place-items-center border border-dashed border-teal/30 bg-mist/20 text-xs text-slate">
+          Post
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,28 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import RouteDivider from "../components/RouteDivider.astro";
+---
+
+<BaseLayout title="Page not found | Xavathon 2027">
+  <section class="bg-chalk py-28 sm:py-36">
+    <div class="mx-auto max-w-2xl px-5 text-center sm:px-8">
+      <h1 class="font-display mt-6 text-4xl font-bold text-deep sm:text-5xl">
+        This one has gone off course
+      </h1>
+      <p class="mt-4 leading-relaxed text-slate">
+        The page you were looking for is not here. The route map, the race details and registration
+        all still are.
+      </p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href="/" class="rounded-full bg-teal px-6 py-3 font-display font-semibold text-chalk transition-colors hover:bg-deep">
+          Back to the start
+        </a>
+        <a href="/races" class="rounded-full border border-teal/30 px-6 py-3 font-display font-semibold text-teal transition-colors hover:bg-mist/30">
+          See the races
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <RouteDivider class="bg-chalk py-2" />
+</BaseLayout>

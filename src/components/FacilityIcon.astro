@@ -1,0 +1,37 @@
+---
+interface Props { name: string; class?: string }
+const { name, class: klass = "w-3.5" } = Astro.props;
+
+const label: Record<string, string> = {
+  water: "Hydration point",
+  medical: "Medical station",
+  toilet: "Toilets",
+  support: "Support and marshals",
+};
+---
+
+<span title={label[name] ?? name} class="inline-flex">
+  <span class="sr-only">{label[name] ?? name}</span>
+  <svg viewBox="0 0 16 16" class={klass} aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6">
+    {name === "water" && <path d="M8 2s4 4.6 4 7.2A4 4 0 0 1 4 9.2C4 6.6 8 2 8 2Z" stroke-linejoin="round" />}
+    {name === "medical" && (
+      <>
+        <rect x="2" y="2" width="12" height="12" rx="3" />
+        <path d="M8 5.2v5.6M5.2 8h5.6" stroke-linecap="round" />
+      </>
+    )}
+    {name === "toilet" && (
+      <>
+        <path d="M4 14V9.5H2.7l1.4-4a1 1 0 0 1 1-.7h.8a1 1 0 0 1 1 .7l1.4 4H7V14" stroke-linejoin="round" />
+        <circle cx="5.5" cy="2.6" r="1.3" />
+        <path d="M11.5 14V9.8m0 0V5.2m0 4.6h1.8L11.5 4.8h-.2L9.6 9.8h1.9Z" stroke-linejoin="round" />
+      </>
+    )}
+    {name === "support" && (
+      <>
+        <path d="M4 14V2" stroke-linecap="round" />
+        <path d="M4 2.8h8l-2 2.8 2 2.8H4" stroke-linejoin="round" />
+      </>
+    )}
+  </svg>
+</span>

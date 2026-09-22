@@ -1,0 +1,120 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import SectionHead from "../components/SectionHead.astro";
+import RaceCards from "../components/RaceCards.astro";
+import GreenInitiatives from "../components/GreenInitiatives.astro";
+import InstagramFeed from "../components/InstagramFeed.astro";
+import RouteDivider from "../components/RouteDivider.astro";
+import {
+  homeIntro,
+  whyXavathon,
+  stats,
+  previousEdition,
+  tiers,
+  registerUrl,
+} from "../data/xavathon";
+
+const openTiers = tiers.filter((t) => t.weight !== "standard");
+---
+
+<BaseLayout
+  title="Xavathon 2027 — Towards Greener Footprints | St. Xavier's College, Kolkata"
+  description="Xavathon 2027, the 2nd edition mini marathon by St. Xavier's College (Autonomous), Kolkata. 3 KM, 5 KM and 10 KM through central Kolkata. Register now."
+>
+  <Hero />
+
+  <!-- Introduction -->
+  <section class="bg-chalk py-20 sm:py-28">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <div class="grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
+        <div class="xv-reveal">
+          <p class="font-display text-2xl leading-snug text-deep sm:text-3xl">{homeIntro.lead}</p>
+          <p class="mt-5 max-w-[60ch] leading-relaxed text-slate">{homeIntro.body}</p>
+          <a
+            href="/about"
+            class="mt-6 inline-block font-display font-semibold text-teal underline underline-offset-4"
+          >
+            The story behind the race
+          </a>
+        </div>
+
+        <dl class="grid grid-cols-2 gap-px self-start overflow-hidden rounded-2xl border border-teal/20 bg-teal/20">
+          {stats.map((s) => (
+            <div class="bg-white px-6 py-7">
+              <dt class="sr-only">{s.label}</dt>
+              <dd>
+                <span class="block font-display text-3xl font-bold text-teal sm:text-4xl">{s.figure}</span>
+                <span class="mt-1 block text-sm text-slate">{s.label}</span>
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Xavathon -->
+  <section class="bg-chalk pb-20 pt-14 sm:pb-28">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <SectionHead
+        title="Why run Xavathon"
+        intro="Four reasons, none of them a finisher's medal — though you get one of those too."
+      />
+      <div class="mt-12 grid gap-x-10 gap-y-9 sm:grid-cols-2">
+        {whyXavathon.map((w) => (
+          <div class="xv-reveal">
+            <h3 class="font-display text-lg font-semibold text-deep">{w.head}</h3>
+            <p class="mt-1.5 max-w-[52ch] leading-relaxed text-slate">{w.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <GreenInitiatives />
+
+  <!-- Previous edition -->
+  <section class="bg-chalk py-20 sm:py-28">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <div class="grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-16">
+        <div class="xv-reveal">
+          <SectionHead title={previousEdition.head} intro={previousEdition.body} />
+          <a
+            href="/gallery"
+            class="mt-6 inline-block font-display font-semibold text-teal underline underline-offset-4"
+          >
+            See the 2026 gallery
+          </a>
+        </div>
+        <dl class="xv-reveal divide-y divide-teal/15 self-center border-y border-teal/15">
+          {previousEdition.points.map((p) => (
+            <div class="flex items-baseline gap-5 py-5">
+              <dd class="font-display text-4xl font-bold text-teal">{p.figure}</dd>
+              <dt class="text-slate">{p.label}</dt>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
+  </section>
+
+<RouteDivider class="bg-chalk py-2" />
+  <!-- Closing CTA -->
+  <section class="bg-deep py-16 text-chalk sm:py-20">
+    <div class="mx-auto flex max-w-[90rem] flex-wrap items-center justify-between gap-6 px-5 sm:px-8">
+      <div>
+        <h2 class="font-display text-3xl font-bold sm:text-4xl">Get to the start line</h2>
+        <p class="mt-2 text-mist/80">Entries open 1 November 2026. Bring someone with you.</p>
+      </div>
+      <a
+        href={registerUrl}
+        class="rounded-full bg-brass px-8 py-4 font-display text-lg font-semibold text-deep transition-colors hover:bg-chalk"
+      >
+        Register now
+      </a>
+    </div>
+  </section>
+
+  
+</BaseLayout>

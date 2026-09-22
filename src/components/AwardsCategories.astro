@@ -1,0 +1,114 @@
+---
+import SectionHead from "./SectionHead.astro";
+import { podium, raceAwards, ageGroups, specialAwards, everyFinisher } from "../data/xavathon";
+---
+
+<section id="awards" class="scroll-mt-20 bg-deep text-chalk py-20 sm:py-28">
+  <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+    <SectionHead
+      as="h2"
+      tone="dark"
+      title="Awards & categories"
+      intro="Xavathon rewards the runner who finishes first and the runner who finishes at all — and one award goes to whoever leaves the course cleanest."
+    />
+
+    <!-- Podium -->
+    <div class="relative mt-14 sm:mt-20 h-64 sm:h-80">
+      <div class="absolute inset-x-0 bottom-0 flex items-end justify-center gap-3 sm:gap-6">
+        {podium.map((step, i) => (
+          <div class={`w-28 sm:w-44 ${i === 1 ? "order-2" : i === 0 ? "order-1" : "order-3"}`}>
+            <div class="flex justify-center">
+              <span
+                class="xv-shine relative overflow-hidden grid place-items-center rounded-full w-12 h-12 sm:w-16 sm:h-16 font-display font-bold text-deep text-sm sm:text-lg"
+                style={`background:${step.metal}`}
+                tabindex="0"
+              >
+                {step.place}
+              </span>
+            </div>
+            <p class="mt-3 text-center font-display text-sm sm:text-base font-semibold">{step.race}</p>
+            <p class="mt-1 text-center text-[11px] sm:text-xs text-mist/70 leading-snug">{step.note}</p>
+            <div class={`mt-4 rounded-t-xl border-x border-t border-mist/25 bg-mist/10 ${step.height}`}></div>
+          </div>
+        ))}
+      </div>
+      <div class="absolute inset-x-0 bottom-0 h-px bg-mist/30"></div>
+    </div>
+
+    <!-- Per-distance awards -->
+    <div class="mt-16 grid gap-4 sm:gap-5 md:grid-cols-3">
+      {raceAwards.map((r) => (
+        <article class="xv-reveal rounded-2xl border border-mist/25 bg-mist/[0.06] p-6">
+          <div class="flex items-baseline justify-between gap-3">
+            <h3 class="font-display text-2xl font-bold text-brass">{r.distance}</h3>
+            <span class="text-xs text-mist/70">{r.label}</span>
+          </div>
+          <p class="mt-3 text-sm text-chalk/90">{r.prize}</p>
+          <ul class="mt-4 space-y-2 border-t border-mist/20 pt-4">
+            {r.lines.map((l) => (
+              <li class="flex gap-2.5 text-sm text-mist/85">
+                <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brass/80"></span>
+                {l}
+              </li>
+            ))}
+          </ul>
+          {r.provisional && (
+            <p class="mt-4 inline-block rounded-full border border-brass/50 px-2.5 py-1 text-[11px] text-brass">
+              Prize money to be confirmed
+            </p>
+          )}
+        </article>
+      ))}
+    </div>
+
+    <!-- Age groups -->
+    <div class="mt-16 grid gap-8 lg:grid-cols-[1fr_1.4fr] lg:gap-14">
+      <div class="xv-reveal">
+        <h3 class="font-display text-xl font-bold">Age-group categories</h3>
+        <p class="mt-2 text-sm leading-relaxed text-mist/75">
+          Applied to the 5 KM and 10 KM races, for men and women separately. Your category is set by
+          your age on race day, 
+          <span class="whitespace-nowrap">not your age at registration.</span>
+        </p>
+        <div class="mt-5 flex flex-wrap gap-2">
+          {ageGroups.map((g) => (
+            <span class="rounded-full border border-mist/30 px-3.5 py-1.5 text-sm">
+              {g.band}
+              <span class="ml-1.5 text-mist/55 text-xs">{g.note}</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <!-- Special awards -->
+      <div class="xv-reveal">
+        <h3 class="font-display text-xl font-bold">Beyond the finish line</h3>
+        <dl class="mt-5 divide-y divide-mist/15 border-t border-mist/15">
+          {specialAwards.map((a) => (
+            <div class="py-4 sm:grid sm:grid-cols-[10rem_1fr] sm:gap-6">
+              <dt>
+                <span class="font-display font-semibold text-brass">{a.name}</span>
+                <span class="block text-xs text-mist/55">{a.who}</span>
+              </dt>
+              <dd class="mt-1.5 sm:mt-0 text-sm leading-relaxed text-mist/85">{a.what}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
+
+    <!-- Every finisher -->
+    <div class="xv-reveal mt-14 rounded-2xl bg-mist/10 border border-mist/20 p-6 sm:p-8">
+      <div class="flex flex-wrap items-center gap-x-8 gap-y-4 justify-between">
+        <h3 class="font-display text-xl font-bold">Every finisher takes home</h3>
+        <ul class="flex flex-wrap gap-x-5 gap-y-2 text-sm text-mist/85">
+          {everyFinisher.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+      <p class="mt-5 border-t border-mist/15 pt-4 text-xs text-mist/60">
+        Categories and prizes shown here are provisional. Final details are confirmed by the
+        Organising Committee and published on this page before registration closes.
+      </p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,13 @@
+---
+interface Props { tone?: "light" | "dark"; class?: string }
+const { tone = "light", class: klass = "" } = Astro.props;
+// The source art is white. On a light (chalk) header that would be
+// invisible, so it's flipped to black with a filter; on a dark
+// background the original white reads fine as-is.
+const recolor = tone === "dark" ? "" : "brightness-0";
+---
+
+<a href="/" class={`inline-flex items-center ${klass}`} aria-label="Xavathon 2027, home">
+  <img src="/images/xavathon.png" alt="Xavathon 2027 — Towards Greener Footprints" class={`h-8 w-auto sm:h-9 ${recolor}`} />
+</a>
+

@@ -1,0 +1,485 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import RaceCards from "../components/RaceCards.astro";
+import CourseMap from "../components/CourseMap.astro";
+import FacilityIcon from "../components/FacilityIcon.astro";
+import {
+  races,
+  registerUrl,
+  routeMaps,
+  routeFacilities,
+  routeNote,
+  event,
+  podium,
+  raceAwards,
+  ageGroups,
+  specialAwards,
+  everyFinisher,
+} from "../data/xavathon";
+
+// One record per distance: race facts + its route map + its award tier,
+// so each race section below can pull everything about that distance
+// from a single object instead of three separate imports.
+const runs = races.map((r) => ({
+  ...r,
+  routeInfo: routeMaps.find((rm) => rm.slug === r.slug),
+  awardInfo: raceAwards.find((a) => a.distance === r.distance),
+}));
+
+const tabPanels = [
+  { key: "route", label: "Route & map" },
+  { key: "receives", label: "What you get" },
+  { key: "awards", label: "Awards" },
+  { key: "rules", label: "Race rules" },
+  { key: "requirements", label: "Race-day requirements" },
+] as const;
+---
+
+<BaseLayout
+  title="Races, Routes & Awards | Xavathon 2027"
+  description="Distances, eligibility, fees, course maps, rules and prizes for the Xavathon 2027 Fun Run, Challenge Run and Competitive Run — all in one place."
+>
+  <!-- Hero -->
+  <section class="bg-deep py-16 text-chalk sm:py-20">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <h1 class="font-display text-4xl font-bold leading-tight sm:text-6xl">
+        Races, Routes &amp; Awards
+      </h1>
+      <p class="mt-5 max-w-2xl text-lg leading-relaxed text-mist/85">
+        Three distances off one start line. Pick a distance below and everything about it — the
+        course map, what you get, and what you can win — sits in one place.
+      </p>
+      <p class="mt-3 max-w-2xl text-sm leading-relaxed text-mist/70">
+        All three start and finish at the college gate on Mother Teresa Sarani, closed to traffic
+        and marshalled at every junction.
+      </p>
+
+      <nav class="mt-8 flex flex-wrap gap-2" aria-label="Jump to a race">
+        {runs.map((r) => (
+          <a
+            href={`#${r.slug}`}
+            class="border border-mist/35 px-5 py-2.5 font-display text-sm font-semibold transition-colors hover:bg-mist/10"
+          >
+            {r.distance} · {r.name}
+          </a>
+        ))}
+      </nav>
+    </div>
+  </section>
+
+  <!-- Course facilities legend (applies to every distance) -->
+  <section class="border-b border-teal/15 bg-chalk py-8">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <p class="font-display text-sm font-semibold text-teal">On every course</p>
+      <div class="mt-4 flex flex-wrap gap-x-8 gap-y-4">
+        {routeFacilities.map((f) => (
+          <div class="flex items-start gap-2.5">
+            <span class="mt-0.5 text-teal"><FacilityIcon name={f.key} class="w-4" /></span>
+            <div>
+              <p class="font-display text-sm font-semibold text-deep">{f.name}</p>
+              <p class="max-w-[28ch] text-xs text-slate">{f.note}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+      <p class="mt-6 max-w-[70ch] border-t border-teal/15 pt-4 text-sm text-slate">{routeNote}</p>
+    </div>
+  </section>
+
+  <!-- Comparison at a glance -->
+  <section class="bg-chalk py-16 sm:py-20">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <h2 class="font-display text-2xl font-bold text-deep sm:text-3xl">At a glance</h2>
+      <p class="mt-2 max-w-2xl text-slate">
+        The short version. Scroll down for the map, the fine print and the prize list behind each
+        one.
+      </p>
+      <div class="mt-8">
+        <RaceCards />
+      </div>
+    </div>
+  </section>
+
+  <!-- One full, tabbed module per race: overview + route + awards + rules, together -->
+  {runs.map((r, i) => {
+    const total = r.routeInfo ? parseFloat(r.routeInfo.stops[r.routeInfo.stops.length - 1].km) : 0;
+    const laps = r.slug === "10k" ? 2 : 1;
+    return (
+      <section
+        id={r.slug}
+        class={`scroll-mt-20 py-16 sm:py-20 ${i % 2 === 0 ? "bg-mist/25" : "bg-chalk"}`}
+      >
+        <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+          <div class="flex flex-wrap items-end justify-between gap-6 border-b border-teal/20 pb-8">
+            <div>
+              <div class="flex items-baseline gap-4">
+                <p class="font-display text-5xl font-bold text-teal sm:text-6xl">{r.distance}</p>
+                <p class="font-display text-2xl font-semibold text-deep">{r.name}</p>
+              </div>
+              <p class="mt-4 max-w-[58ch] leading-relaxed text-slate">{r.summary}</p>
+            </div>
+            <a
+              href={registerUrl}
+              class="bg-teal px-6 py-3 font-display font-semibold text-chalk transition-colors hover:bg-deep"
+            >
+              Enter the {r.distance}
+            </a>
+          </div>
+
+          <!-- Key facts -->
+          <dl class="mt-8 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div>
+              <dt class="font-display text-sm font-semibold text-teal">Flag-off</dt>
+              <dd class="mt-1 text-deep">{r.flagOff}</dd>
+              <dd class="text-sm text-slate">Cutoff {r.cutoff}</dd>
+            </div>
+            <div>
+              <dt class="font-display text-sm font-semibold text-teal">Entry fee</dt>
+              <dd class="mt-1 text-deep">{r.fee}</dd>
+              <dd class="text-sm text-slate">{r.feeGroup}</dd>
+            </div>
+            <div>
+              <dt class="font-display text-sm font-semibold text-teal">Eligibility</dt>
+              <dd class="mt-1 max-w-[34ch] text-deep">{r.eligibility}</dd>
+            </div>
+            <div>
+              <dt class="font-display text-sm font-semibold text-teal">Age category</dt>
+              <dd class="mt-1 text-deep">
+                {r.minAge === "No minimum" ? "No minimum age" : `Minimum age ${r.minAge}`}
+              </dd>
+              <dd class="max-w-[34ch] text-sm text-slate">{r.ageNote}</dd>
+            </div>
+          </dl>
+
+          <!-- Tabbed detail card: route, what-you-get, awards, rules, requirements -->
+          <div class="mt-8 overflow-hidden border border-teal/20 bg-white">
+            <div
+              class="flex flex-wrap gap-1.5 border-b border-teal/15 bg-mist/10 p-2"
+              role="tablist"
+              aria-label={`${r.distance} details`}
+              data-tabs={r.slug}
+            >
+              {tabPanels.map((t, ti) => (
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected={ti === 0 ? "true" : "false"}
+                  data-tab-btn={t.key}
+                  data-group={r.slug}
+                  class={`tab-btn px-4 py-2.5 font-display text-sm font-semibold transition-colors ${
+                    ti === 0 ? "bg-teal text-chalk" : "text-slate hover:bg-white"
+                  }`}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+
+            <div class="p-6 sm:p-8">
+              <!-- Route & map -->
+              <div data-panel="route" data-group={r.slug} class="tab-panel">
+                <p class="text-sm leading-relaxed text-slate">
+                  <span class="font-display font-semibold text-deep">Route.</span> {r.route}
+                  {r.timed ? " Chip-timed end to end." : " Timed for your own record, with no ranking."}
+                </p>
+
+                {r.routeInfo && (
+                  <div class="mt-6 grid gap-8 lg:grid-cols-[1.25fr_1fr] lg:gap-10">
+                    <div class="border border-teal/20 bg-mist/10 p-4 sm:p-6">
+                      <CourseMap stops={r.routeInfo.stops} total={total} laps={laps} />
+                    </div>
+
+                    <div>
+                      <dl class="grid grid-cols-2 gap-x-6 gap-y-4">
+                        <div>
+                          <dt class="font-display text-xs font-semibold text-teal">Start</dt>
+                          <dd class="mt-1 text-sm text-deep">{r.routeInfo.start}</dd>
+                        </div>
+                        <div>
+                          <dt class="font-display text-xs font-semibold text-teal">Finish</dt>
+                          <dd class="mt-1 text-sm text-deep">{r.routeInfo.finish}</dd>
+                        </div>
+                      </dl>
+
+                      <h4 class="mt-6 font-display text-xs font-semibold uppercase tracking-wide text-teal">
+                        Along the course
+                      </h4>
+                      <ol class="mt-3 divide-y divide-teal/15 border-y border-teal/15">
+                        {r.routeInfo.stops.map((s) => (
+                          <li class="flex flex-wrap items-baseline gap-x-4 gap-y-1.5 py-3">
+                            <span class="font-display w-12 shrink-0 font-bold text-deep tabular-nums">{s.km}</span>
+                            <span class="flex-1">
+                              <span class="text-sm text-deep">{s.name}</span>
+                              {s.note && <span class="mt-0.5 block max-w-[40ch] text-xs text-slate">{s.note}</span>}
+                            </span>
+                            <span class="flex shrink-0 gap-2 text-teal">
+                              {s.facilities.map((f) => <FacilityIcon name={f} />)}
+                            </span>
+                          </li>
+                        ))}
+                      </ol>
+
+                      <h4 class="mt-6 font-display text-xs font-semibold uppercase tracking-wide text-teal">
+                        Landmarks
+                      </h4>
+                      <p class="mt-2 text-sm leading-relaxed text-slate">{r.routeInfo.landmarks.join(" · ")}</p>
+
+                      <h4 class="mt-6 font-display text-xs font-semibold uppercase tracking-wide text-teal">
+                        Elevation
+                      </h4>
+                      <div class="mt-2 border border-teal/20 bg-mist/10 px-4 py-3">
+                        <svg
+                          viewBox="0 0 300 40"
+                          class="h-10 w-full"
+                          role="img"
+                          aria-label={`Elevation profile: ${r.routeInfo.elevation}`}
+                        >
+                          <path
+                            d={r.slug === "5k" ? "M0,32 H150 C170,32 175,16 190,16 C205,16 210,32 230,32 H300" : "M0,30 H300"}
+                            fill="none"
+                            stroke="currentColor"
+                            class="text-teal"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                          />
+                        </svg>
+                        <p class="mt-1 text-xs text-slate">{r.routeInfo.elevation}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <a
+                  href={`#${r.slug}`}
+                  class="mt-6 inline-block font-display text-sm font-semibold text-teal underline underline-offset-4"
+                >
+                  Back to the top of {r.distance}
+                </a>
+              </div>
+
+              <!-- What you get -->
+              <div data-panel="receives" data-group={r.slug} class="tab-panel hidden">
+                <ul class="grid gap-x-8 gap-y-2.5 sm:grid-cols-2">
+                  {r.receives.map((line) => (
+                    <li class="flex gap-2.5 text-sm leading-relaxed text-slate">
+                      <span class="mt-1.5 h-1.5 w-1.5 shrink-0 bg-teal/60"></span>
+                      {line}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <!-- Awards -->
+              <div data-panel="awards" data-group={r.slug} class="tab-panel hidden">
+                {r.awardInfo && (
+                  <div class="flex flex-wrap items-baseline justify-between gap-3">
+                    <p class="font-display text-lg font-bold text-deep">{r.awardInfo.prize}</p>
+                    {r.awardInfo.provisional && (
+                      <span class="inline-block border border-brass/60 bg-brass/10 px-3 py-1 text-[11px] text-deep">
+                        Prize money to be confirmed
+                      </span>
+                    )}
+                  </div>
+                )}
+                <ul class={`grid gap-x-8 gap-y-2.5 sm:grid-cols-2 ${r.awardInfo ? "mt-4 border-t border-teal/15 pt-4" : ""}`}>
+                  {(r.awardInfo?.lines ?? r.awards).map((line) => (
+                    <li class="flex gap-2.5 text-sm leading-relaxed text-slate">
+                      <span class="mt-1.5 h-1.5 w-1.5 shrink-0 bg-teal/60"></span>
+                      {line}
+                    </li>
+                  ))}
+                </ul>
+                <a
+                  href="#awards-categories"
+                  class="mt-5 inline-block font-display text-sm font-semibold text-teal underline underline-offset-4"
+                >
+                  See podiums, age groups &amp; special awards
+                </a>
+              </div>
+
+              <!-- Rules -->
+              <div data-panel="rules" data-group={r.slug} class="tab-panel hidden">
+                <ul class="grid gap-x-8 gap-y-2.5 sm:grid-cols-2">
+                  {r.rules.map((line) => (
+                    <li class="flex gap-2.5 text-sm leading-relaxed text-slate">
+                      <span class="mt-1.5 h-1.5 w-1.5 shrink-0 bg-teal/60"></span>
+                      {line}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <!-- Race-day requirements -->
+              <div data-panel="requirements" data-group={r.slug} class="tab-panel hidden">
+                <ul class="grid gap-x-8 gap-y-2.5 sm:grid-cols-2">
+                  {r.requirements.map((line) => (
+                    <li class="flex gap-2.5 text-sm leading-relaxed text-slate">
+                      <span class="mt-1.5 h-1.5 w-1.5 shrink-0 bg-teal/60"></span>
+                      {line}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          {r.provisional && (
+            <p class="mt-6 inline-block border border-brass/60 bg-brass/10 px-3.5 py-1.5 text-[11px] text-deep">
+              Fees, timings and prize details are provisional until confirmed by the Organising Committee.
+            </p>
+          )}
+        </div>
+      </section>
+    );
+  })}
+
+  <!-- Awards & categories that sit above any single distance -->
+  <section id="awards-categories" class="scroll-mt-20 bg-deep py-20 text-chalk sm:py-28">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <h2 class="font-display text-3xl font-bold sm:text-4xl">Beyond one distance</h2>
+      <p class="mt-4 max-w-2xl leading-relaxed text-mist/80">
+        Xavathon rewards the runner who finishes first and the runner who finishes at all — and
+        one award goes to whoever leaves the course cleanest.
+      </p>
+
+      <!-- Podium -->
+      <div class="relative mt-14 h-64 sm:mt-20 sm:h-80">
+        <div class="absolute inset-x-0 bottom-0 flex items-end justify-center gap-3 sm:gap-6">
+          {podium.map((step, i) => (
+            <div class={`w-28 sm:w-44 ${i === 1 ? "order-2" : i === 0 ? "order-1" : "order-3"}`}>
+              <div class="flex justify-center">
+                <span
+                  class="xv-shine relative grid h-12 w-12 place-items-center overflow-hidden font-display text-sm font-bold text-deep sm:h-16 sm:w-16 sm:text-lg"
+                  style={`background:${step.metal}`}
+                  tabindex="0"
+                >
+                  {step.place}
+                </span>
+              </div>
+              <p class="mt-3 text-center font-display text-sm font-semibold sm:text-base">{step.race}</p>
+              <p class="mt-1 text-center text-[11px] leading-snug text-mist/70 sm:text-xs">{step.note}</p>
+              <div class={`mt-4 border-x border-t border-mist/25 bg-mist/10 ${step.height}`}></div>
+            </div>
+          ))}
+        </div>
+        <div class="absolute inset-x-0 bottom-0 h-px bg-mist/30"></div>
+      </div>
+
+      <!-- Age groups & special awards -->
+      <div class="mt-16 grid gap-8 lg:grid-cols-[1fr_1.4fr] lg:gap-14">
+        <div class="xv-reveal">
+          <h3 class="font-display text-xl font-bold">Age-group categories</h3>
+          <p class="mt-2 text-sm leading-relaxed text-mist/75">
+            Applied to the 5 KM and 10 KM races, for men and women separately. Your category is set
+            by your age on race day, <span class="whitespace-nowrap">not your age at registration.</span>
+          </p>
+          <div class="mt-5 flex flex-wrap gap-2">
+            {ageGroups.map((g) => (
+              <span class="border border-mist/30 px-3.5 py-1.5 text-sm">
+                {g.band}
+                <span class="ml-1.5 text-xs text-mist/55">{g.note}</span>
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <div class="xv-reveal">
+          <h3 class="font-display text-xl font-bold">Beyond the finish line</h3>
+          <dl class="mt-5 divide-y divide-mist/15 border-t border-mist/15">
+            {specialAwards.map((a) => (
+              <div class="py-4 sm:grid sm:grid-cols-[10rem_1fr] sm:gap-6">
+                <dt>
+                  <span class="font-display font-semibold text-brass">{a.name}</span>
+                  <span class="block text-xs text-mist/55">{a.who}</span>
+                </dt>
+                <dd class="mt-1.5 text-sm leading-relaxed text-mist/85 sm:mt-0">{a.what}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+
+      <!-- Every finisher -->
+      <div class="xv-reveal mt-14 border border-mist/20 bg-mist/10 p-6 sm:p-8">
+        <div class="flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
+          <h3 class="font-display text-xl font-bold">Every finisher takes home</h3>
+          <ul class="flex flex-wrap gap-x-5 gap-y-2 text-sm text-mist/85">
+            {everyFinisher.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+        <p class="mt-5 border-t border-mist/15 pt-4 text-xs text-mist/60">
+          Categories, prizes and course details shown on this page are provisional. Final details
+          are confirmed by the Organising Committee and published here before registration closes.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Getting to the start -->
+  <section class="bg-mist/25 py-14">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <h2 class="font-display text-2xl font-bold text-deep">Getting to the start</h2>
+      <p class="mt-3 max-w-[64ch] leading-relaxed text-slate">
+        Roads around the course close from 3:30 AM on {event.dateShort}. Park Street Metro is a
+        four-minute walk from the gate and is the only reliable way in on race morning — parking
+        near the start is limited and not reserved for runners.
+      </p>
+      <a
+        href="/participant-guide#transport"
+        class="mt-5 inline-block font-display font-semibold text-teal underline underline-offset-4"
+      >
+        Parking, transport and bag drop
+      </a>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="bg-deep py-16 text-chalk sm:py-20">
+    <div class="mx-auto flex max-w-[90rem] flex-wrap items-center justify-between gap-6 px-5 sm:px-8">
+      <div>
+        <h2 class="font-display text-3xl font-bold">Still deciding?</h2>
+        <p class="mt-2 max-w-xl text-mist/80">
+          Most first-timers pick the 5 KM and finish it comfortably. The 3 KM is a walk if you want
+          it to be. You can change distance up to the day entries close.
+        </p>
+      </div>
+      <a
+        href={registerUrl}
+        class="bg-brass px-8 py-4 font-display text-lg font-semibold text-deep transition-colors hover:bg-chalk"
+      >
+        Register now
+      </a>
+    </div>
+  </section>
+
+  <script>
+    // CSS-free, dependency-free tabs: each race module wires its own
+    // buttons to its own panels via a shared `data-group` (the race slug),
+    // so the three modules never cross-talk.
+    document.querySelectorAll<HTMLElement>("[data-tabs]").forEach((nav) => {
+      const group = nav.dataset.tabs;
+      const buttons = Array.from(nav.querySelectorAll<HTMLButtonElement>("[data-tab-btn]"));
+      const panels = Array.from(
+        document.querySelectorAll<HTMLElement>(`[data-panel][data-group="${group}"]`)
+      );
+
+      buttons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const key = btn.dataset.tabBtn;
+
+          buttons.forEach((b) => {
+            const active = b === btn;
+            b.classList.toggle("bg-teal", active);
+            b.classList.toggle("text-chalk", active);
+            b.classList.toggle("text-slate", !active);
+            b.setAttribute("aria-selected", String(active));
+          });
+
+          panels.forEach((p) => {
+            p.classList.toggle("hidden", p.dataset.panel !== key);
+          });
+        });
+      });
+    });
+  </script>
+</BaseLayout>

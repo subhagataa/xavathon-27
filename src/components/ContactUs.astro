@@ -1,0 +1,97 @@
+---
+import { contacts, eventEmail } from "../data/xavathon";
+
+const socials = [
+  { name: "Instagram", handle: "@xavathon", href: "https://instagram.com/" },
+  { name: "Facebook", handle: "St. Xavier's College, Kolkata", href: "https://facebook.com/" },
+  { name: "LinkedIn", handle: "St. Xavier's College (Autonomous)", href: "https://linkedin.com/" },
+];
+---
+
+<section id="contact" class="bg-chalk">
+  <div class="border-b border-teal/15 bg-deep py-16 text-chalk sm:py-20">
+    <div class="mx-auto max-w-[80rem] px-5 sm:px-8">
+      <p class="font-display text-brass">Talk to the team</p>
+      <h1 class="font-display mt-3 text-4xl font-bold leading-tight sm:text-6xl">Contact us</h1>
+      <p class="mt-5 max-w-2xl text-lg leading-relaxed text-mist/85">
+        Registration, sponsorship, volunteering or press — write, call or drop by. A student runs
+        every one of these lines, so expect a real reply.
+      </p>
+    </div>
+  </div>
+
+  <div class="mx-auto max-w-[80rem] px-5 sm:px-8">
+    <!-- Primary contact strip -->
+    <div class="grid divide-y divide-teal/15 border-b border-teal/15 sm:grid-cols-2 sm:divide-x sm:divide-y-0">
+      <a href={`mailto:${eventEmail}`} class="group flex flex-col justify-between gap-6 py-10 pr-0 sm:pr-10">
+        <span class="font-display text-xs uppercase tracking-[0.16em] text-teal">Email</span>
+        <span class="font-display text-2xl text-deep transition-colors group-hover:text-teal sm:text-3xl">
+          {eventEmail}
+        </span>
+      </a>
+      <div class="flex flex-col justify-between gap-6 py-10 pl-0 sm:pl-10">
+        <span class="font-display text-xs uppercase tracking-[0.16em] text-teal">Where we start</span>
+        <div>
+          <address class="not-italic leading-relaxed text-deep">
+            St. Xavier's College (Autonomous), Kolkata<br />
+            30, Mother Teresa Sarani (Park Street), Kolkata 700016
+          </address>
+          <a
+            href="https://maps.google.com/?q=St+Xavier's+College+Park+Street+Kolkata"
+            class="mt-2 inline-block text-sm font-semibold text-teal underline underline-offset-4"
+          >
+            Open in Maps
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- The team, as a plain list — not a card grid -->
+    <div class="border-b border-teal/15 py-12">
+      <p class="font-display text-xs uppercase tracking-[0.16em] text-teal">Speak to the team</p>
+      <ul class="mt-5 divide-y divide-teal/15 border-y border-teal/15">
+        {contacts.map((c, i) => (
+          <li class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 py-4">
+            <span class="flex items-baseline gap-4">
+              <span class="font-display w-6 text-sm text-mist/50">{String(i + 1).padStart(2, "0")}</span>
+              <span>
+                <span class="font-display font-semibold text-deep">{c.name}</span>
+                <span class="ml-2 text-sm text-slate">{c.role}</span>
+              </span>
+            </span>
+            <a href={`tel:${c.phone.replace(/\s/g, "")}`} class="font-display text-deep hover:text-teal">
+              {c.phone}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <!-- Socials + closing -->
+    <div class="flex flex-wrap items-center justify-between gap-6 py-12">
+      <div>
+        <p class="font-display text-xs uppercase tracking-[0.16em] text-teal">Follow the run</p>
+        <ul class="mt-4 flex flex-wrap gap-2">
+          {socials.map((s) => (
+            <li>
+              <a
+                href={s.href}
+                class="inline-flex items-baseline gap-2 border border-teal/30 px-4 py-2 text-sm transition-colors hover:bg-mist/30"
+              >
+                <span class="font-semibold text-deep">{s.name}</span>
+                <span class="text-xs text-slate">{s.handle}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <a
+        href={`mailto:${eventEmail}?subject=Xavathon%202027`}
+        class="font-display inline-flex shrink-0 items-center bg-teal px-6 py-3 text-sm text-chalk transition-colors hover:bg-deep"
+      >
+        Write to us
+      </a>
+    </div>
+  </div>
+</section>

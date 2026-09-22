@@ -1,0 +1,159 @@
+---
+import type { RouteStop } from "../data/xavathon";
+
+/* A schematic loop, not a survey. Markers are placed by walking the
+   perimeter of a rounded rectangle to the fraction of the distance
+   each stop sits at — so the map is generated from the same numbers
+   as the list beside it and the two can never disagree. */
+
+interface Props {
+  stops: RouteStop[];
+  laps?: number;
+  total: number; // race distance in km
+  class?: string;
+}
+const { stops, laps = 1, total, class: klass = "" } = Astro.props;
+
+const X = 90, Y = 60, W = 620, H = 260, R = 80;
+const straightW = W - 2 * R;
+const straightH = H - 2 * R;
+const arc = (Math.PI * R) / 2;
+const perim = 2 * straightW + 2 * straightH + 4 * arc;
+
+/* Point at distance `d` along the perimeter, starting top-left and
+   running clockwise. Returns the point plus an outward normal, so
+   labels can sit clear of the line. */
+function pointAt(d: number) {
+  let t = ((d % perim) + perim) % perim;
+  const onArc = (cx: number, cy: number, a0: number, len: number) => {
+    const a = a0 + (len / arc) * (Math.PI / 2);
+    return { x: cx + R * Math.cos(a), y: cy + R * Math.sin(a), nx: Math.cos(a), ny: Math.sin(a) };
+  };
+
+  if (t <= straightW) return { x: X + R + t, y: Y, nx: 0, ny: -1 };
+  t -= straightW;
+  if (t <= arc) return onArc(X + W - R, Y + R, -Math.PI / 2, t);
+  t -= arc;
+  if (t <= straightH) return { x: X + W, y: Y + R + t, nx: 1, ny: 0 };
+  t -= straightH;
+  if (t <= arc) return onArc(X + W - R, Y + H - R, 0, t);
+  t -= arc;
+  if (t <= straightW) return { x: X + W - R - t, y: Y + H, nx: 0, ny: 1 };
+  t -= straightW;
+  if (t <= arc) return onArc(X + R, Y + H - R, Math.PI / 2, t);
+  t -= arc;
+  if (t <= straightH) return { x: X, y: Y + H - R - t, nx: -1, ny: 0 };
+  t -= straightH;
+  return onArc(X + R, Y + R, Math.PI, t);
+}
+
+const d = `M${X + R},${Y} H${X + W - R} A${R},${R} 0 0 1 ${X + W},${Y + R} V${Y + H - R} A${R},${R} 0 0 1 ${X + W - R},${Y + H} H${X + R} A${R},${R} 0 0 1 ${X},${Y + H - R} V${Y + R} A${R},${R} 0 0 1 ${X + R},${Y}Z`;
+
+/* One lap of the loop stands for total/laps kilometres. Stops past
+   the lap point wrap round onto the same line — that is what running
+   two laps looks like. */
+const lapKm = total / laps;
+const placed = stops.map((s, i) => {
+  const p = pointAt((parseFloat(s.km) / lapKm) * perim);
+  return { ...s, ...p, isGate: i === 0 || i === stops.length - 1 };
+});
+
+/* On a loop, the gate is the start, the lap point and the finish all
+   at once. Merge anything landing on the same spot into one marker
+   rather than stacking three dots and three labels on top of it. */
+const groups = new Map<string, typeof placed>();
+for (const m of placed) {
+  const key = `${m.x.toFixed(0)}:${m.y.toFixed(0)}`;
+  groups.set(key, [...(groups.get(key) ?? []), m]);
+}
+
+const markers = [...groups.values()].map((g) => {
+  const head = g[0];
+  const gate = g.some((m) => m.isGate);
+  return {
+    x: head.x,
+    y: head.y,
+    nx: head.nx,
+    ny: head.ny,
+    gate,
+    km: g.map((m) => m.km).join(" · "),
+    name: gate && g.length > 1 ? "Start & finish" : head.name.replace(/^(Start|Finish|Lap point) — /, ""),
+    lx: head.x + head.nx * 30,
+    ly: head.y + head.ny * 30,
+    anchor: head.nx > 0.3 ? "start" : head.nx < -0.3 ? "end" : "middle",
+  };
+});
+---
+
+<figure class={klass}>
+  <svg viewBox="0 0 800 380" class="w-full" role="img" aria-label="Schematic course map">
+    <!-- the road -->
+    <path d={d} fill="none" stroke="currentColor" class="text-mist" stroke-width="22" stroke-linejoin="round" />
+    <path
+      d={d}
+      fill="none"
+      stroke="currentColor"
+      class="text-teal/70"
+      stroke-width="3"
+      stroke-dasharray="10 12"
+      stroke-linecap="round"
+    />
+
+    {laps > 1 && (
+      <g>
+        <rect x={X + W / 2 - 52} y={Y + H / 2 - 20} width="104" height="40" rx="20" class="fill-deep" />
+        <text
+          x={X + W / 2}
+          y={Y + H / 2 + 6}
+          text-anchor="middle"
+          class="fill-chalk font-display text-[17px] font-bold"
+        >
+          {laps} laps
+        </text>
+      </g>
+    )}
+
+    {markers.map((m) => (
+      <g>
+        <line
+          x1={m.x}
+          y1={m.y}
+          x2={m.x + m.nx * 18}
+          y2={m.y + m.ny * 18}
+          stroke="currentColor"
+          class="text-teal/40 max-sm:hidden"
+          stroke-width="1.5"
+        />
+        <circle
+          cx={m.x}
+          cy={m.y}
+          r={m.gate ? 11 : 8}
+          class={m.gate ? "fill-brass" : "fill-teal"}
+          stroke="currentColor"
+          stroke-width="3"
+          style="color: var(--color-chalk)"
+        />
+        <text
+          x={m.lx}
+          y={m.ly}
+          text-anchor={m.anchor}
+          class="fill-current font-display text-[15px] font-bold text-deep max-sm:hidden"
+        >
+          {m.km} km
+        </text>
+        <text
+          x={m.lx}
+          y={m.ly + 16}
+          text-anchor={m.anchor}
+          class="fill-current text-[12px] text-slate max-sm:hidden"
+        >
+          {m.name}
+        </text>
+      </g>
+    ))}
+  </svg>
+  <figcaption class="mt-2 text-center text-xs text-slate">
+    Schematic. Distances are to scale along the course; the shape is not.
+    <span class="sm:hidden"> Every stop is listed below.</span>
+  </figcaption>
+</figure>

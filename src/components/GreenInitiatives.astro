@@ -1,0 +1,28 @@
+---
+import SectionHead from "./SectionHead.astro";
+import { greenInitiatives } from "../data/xavathon";
+---
+
+<section id="green" class="bg-mist/25 py-20 sm:py-28">
+  <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+    <SectionHead
+      title="Towards greener footprints"
+      intro="The theme is not a slogan on a T-shirt. It is a set of decisions about how this race is run, and most of them cost us something."
+    />
+
+    <div class="mt-12 grid gap-px overflow-hidden border border-teal/20 bg-teal/20 sm:grid-cols-2 lg:grid-cols-3">
+      {greenInitiatives.map((g) => (
+        <div class="bg-chalk p-7">
+          <h3 class="font-display text-lg font-semibold text-deep">{g.head}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slate">{g.body}</p>
+        </div>
+      ))}
+    </div>
+
+    <p class="xv-reveal mt-8 max-w-2xl text-sm leading-relaxed text-slate">
+      One award on race day goes to the runner and the contingent who do this best — the
+      <a href="/awards" class="font-semibold text-teal underline underline-offset-4">Greenest Footprint</a>.
+      It is the only prize where finishing time counts for nothing.
+    </p>
+  </div>
+</section>

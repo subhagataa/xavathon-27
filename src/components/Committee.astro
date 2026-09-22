@@ -1,0 +1,48 @@
+---
+import SectionHead from "./SectionHead.astro";
+import { organisingCommittee, workingCommittee, otherMembers, eventEmail } from "../data/xavathon";
+
+const groups = [
+  { label: "Organising Committee", members: organisingCommittee },
+  { label: "Working Committee", members: workingCommittee },
+  { label: "Others", members: otherMembers },
+];
+---
+
+<section id="committee" class="scroll-mt-20 bg-chalk py-20 sm:py-24">
+  <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+    <SectionHead
+      title="Members & committee"
+      intro="Xavathon is planned and run entirely by students, with faculty oversight. These are the teams behind it — names are confirmed and published here as the committee is finalised each year."
+    />
+
+    <div class="text-center">
+      {groups.map((g) => (
+        <div class="xv-reveal mt-16 first:mt-12">
+          <h3 class="font-display border-b border-teal/20 pb-4 text-xl font-bold text-deep">
+            {g.label}
+          </h3>
+
+          <div class="mt-10 flex flex-wrap justify-center gap-x-8 gap-y-10">
+            {g.members.map((m) => (
+              <div class="flex w-36 flex-col items-center sm:w-40">
+                <img
+                  src={m.image}
+                  alt={m.name}
+                  class="aspect-square w-full border border-teal/20 object-cover"
+                />
+                <p class="font-display mt-3 text-sm font-semibold text-deep">{m.name}</p>
+                <p class="mt-1 text-xs text-slate">{m.designation}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      <p class="xv-reveal mx-auto mt-16 max-w-[64ch] text-sm leading-relaxed text-slate">
+        Want to volunteer on race day, or join next year's committee? Write to
+        <a href={`mailto:${eventEmail}`} class="font-semibold text-teal underline underline-offset-4">{eventEmail}</a>.
+      </p>
+    </div>
+  </div>
+</section>

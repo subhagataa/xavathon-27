@@ -1,0 +1,200 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SectionHead from "../components/SectionHead.astro";
+import Countdown from "../components/Countdown.astro";
+import RouteDivider from "../components/RouteDivider.astro";
+import {
+  races,
+  regWindows,
+  regTypes,
+  paymentInfo,
+  terms,
+  refundPolicy,
+  everyFinisher,
+  registerUrl,
+  eventEmail,
+} from "../data/xavathon";
+---
+
+<BaseLayout
+  title="Registration — fees, categories and deadlines | Xavathon 2027"
+  description="Register for Xavathon 2027. Individual, group and corporate entry, fees for the 3 KM, 5 KM and 10 KM, payment information, deadlines and refund policy."
+>
+  <section class="bg-deep py-16 text-chalk sm:py-20">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <div class="grid gap-10 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
+        <div>
+          <h1 class="font-display text-4xl font-bold leading-tight sm:text-6xl">Registration</h1>
+          <p class="mt-5 max-w-xl text-lg leading-relaxed text-mist/85">
+            Entry is online and paperless. Pick a distance, pay once, and collect your bib on either
+            of the two days before the race.
+          </p>
+          <a
+            href={registerUrl}
+            id="register"
+            class="mt-8 inline-block scroll-mt-24 rounded-full bg-brass px-8 py-4 font-display text-lg font-semibold text-deep transition-colors hover:bg-chalk"
+          >
+            Register now
+          </a>
+          <p class="mt-3 text-sm text-mist/60">
+            Entries close 7 February 2027. There is no registration on race day.
+          </p>
+        </div>
+        <div class="self-end">
+          <p class="mb-3 text-sm text-mist/60">Until flag-off</p>
+          <Countdown tone="dark" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <RouteDivider class="bg-chalk py-2" />
+
+  <!-- Pricing -->
+  <section class="bg-chalk py-20 sm:py-24">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <SectionHead
+        title="Categories and fees"
+        intro="One fee per distance, the same for everyone, with a discount for contingents of ten or more."
+      />
+
+      <div class="mt-12 grid gap-5 md:grid-cols-3">
+        {races.map((r) => (
+          <article class="xv-reveal flex flex-col rounded-2xl border border-teal/20 bg-white p-7">
+            <div class="flex items-baseline justify-between gap-3">
+              <p class="font-display text-3xl font-bold text-teal">{r.distance}</p>
+              <p class="text-sm text-slate">{r.name}</p>
+            </div>
+            <p class="font-display mt-5 text-4xl font-bold text-deep">{r.fee}</p>
+            <p class="mt-1 text-sm text-slate">{r.feeGroup}</p>
+            <p class="mt-4 flex-1 border-t border-teal/15 pt-4 text-sm leading-relaxed text-slate">
+              {r.eligibility}
+            </p>
+            <a
+              href={registerUrl}
+              class="mt-5 rounded-full bg-teal px-5 py-2.5 text-center font-display text-sm font-semibold text-chalk transition-colors hover:bg-deep"
+            >
+              Enter the {r.distance}
+            </a>
+          </article>
+        ))}
+      </div>
+
+      <!-- What's included -->
+      <div class="xv-reveal mt-8 flex flex-wrap items-center gap-x-8 gap-y-4 rounded-2xl border border-teal/20 bg-mist/25 px-7 py-6">
+        <h3 class="font-display text-lg font-bold text-deep">Every entry includes</h3>
+        <ul class="flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate">
+          {everyFinisher.map((i) => (
+            <li class="flex items-center gap-2">
+              <span class="h-1.5 w-1.5 rounded-full bg-teal/60"></span>
+              {i}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <RouteDivider class="bg-mist/25 py-2" />
+
+  <!-- Deadlines -->
+  <section class="bg-mist/25 py-20 sm:py-24">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <SectionHead
+        title="Deadlines"
+        intro="Fees rise as the date gets closer, and T-shirt sizes run out in the order people enter."
+      />
+      <ol class="mt-10 grid gap-px overflow-hidden rounded-2xl border border-teal/20 bg-teal/20 sm:grid-cols-2 lg:grid-cols-4">
+        {regWindows.map((w) => (
+          <li class={`p-6 ${w.state === "closed" ? "bg-deep text-chalk" : "bg-chalk"}`}>
+            <p class={`font-display text-base font-bold ${w.state === "closed" ? "text-brass" : "text-deep"}`}>
+              {w.name}
+            </p>
+            <p class={`mt-2 text-sm ${w.state === "closed" ? "text-mist/85" : "text-teal"}`}>{w.window}</p>
+            <p class={`mt-2 text-sm leading-relaxed ${w.state === "closed" ? "text-mist/65" : "text-slate"}`}>
+              {w.note}
+            </p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <RouteDivider class="bg-chalk py-2" />
+
+  <!-- How to register -->
+  <section class="bg-chalk py-20 sm:py-24">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <SectionHead title="How to register" intro="Three ways in, depending on how many of you are coming." />
+      <div class="mt-12 grid gap-5 lg:grid-cols-3">
+        {regTypes.map((t) => (
+          <article class="xv-reveal rounded-2xl border border-teal/20 bg-white p-7">
+            <h3 class="font-display text-xl font-bold text-deep">{t.name}</h3>
+            <p class="mt-1 text-sm text-teal">{t.who}</p>
+            <p class="mt-4 text-sm leading-relaxed text-slate">{t.how}</p>
+            <ul class="mt-5 space-y-2.5 border-t border-teal/15 pt-4">
+              {t.points.map((p) => (
+                <li class="flex gap-2.5 text-sm text-slate">
+                  <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-teal/60"></span>
+                  {p}
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+
+      <p class="xv-reveal mt-6 text-sm text-slate">
+        For a contingent form or an invoice, write to
+        <a href={`mailto:${eventEmail}`} class="font-semibold text-teal underline underline-offset-4">{eventEmail}</a>.
+      </p>
+    </div>
+  </section>
+
+  <RouteDivider class="bg-chalk py-2" />
+
+  <!-- Payment, refund, terms -->
+  <section class="bg-deep py-20 text-chalk sm:py-24">
+    <div class="mx-auto max-w-[90rem] px-5 sm:px-8">
+      <div class="grid gap-10 lg:grid-cols-2 lg:gap-16">
+        <div class="xv-reveal">
+          <h2 class="font-display text-2xl font-bold">Payment</h2>
+          <ul class="mt-5 space-y-3 border-t border-mist/15 pt-5">
+            {paymentInfo.map((p) => (
+              <li class="flex gap-3 text-sm leading-relaxed text-mist/85">
+                <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-brass"></span>
+                {p}
+              </li>
+            ))}
+          </ul>
+
+          <div class="mt-9 rounded-2xl border border-brass/40 bg-brass/10 p-6">
+            <h3 class="font-display text-lg font-bold text-brass">{refundPolicy.head}</h3>
+            <p class="mt-2 max-w-[58ch] text-sm leading-relaxed text-mist/85">{refundPolicy.body}</p>
+            {refundPolicy.provisional && (
+              <p class="mt-3 text-[11px] text-mist/60">Subject to final confirmation.</p>
+            )}
+          </div>
+        </div>
+
+        <div id="terms" class="xv-reveal scroll-mt-24">
+          <h2 class="font-display text-2xl font-bold">Terms and conditions</h2>
+          <ol class="mt-5 divide-y divide-mist/15 border-y border-mist/15">
+            {terms.map((t, i) => (
+              <li class="flex gap-4 py-4">
+                <span class="font-display shrink-0 font-bold text-brass tabular-nums">{i + 1}</span>
+                <span class="max-w-[56ch] text-sm leading-relaxed text-mist/85">{t}</span>
+              </li>
+            ))}
+          </ol>
+          <p class="mt-5 text-xs leading-relaxed text-mist/60">
+            Entering the race is acceptance of these terms. The full text is issued with your
+            registration confirmation.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <RouteDivider class="bg-deep py-2" tone="dark" />
+</BaseLayout>

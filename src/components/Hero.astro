@@ -1,0 +1,56 @@
+---
+import Countdown from "./Countdown.astro";
+import { event, races, registerUrl } from "../data/xavathon";
+---
+
+<!-- Truly fullscreen: the photo starts at the very top of the page.
+     The only thing that ever sits on top of it is the hamburger
+     button from Header.astro, floating in the corner — there is no
+     strip, bar or HUD of any kind above or across this image. -->
+<section class="relative flex min-h-screen items-center justify-center overflow-hidden bg-deep text-chalk">
+  <!-- Campus backdrop, fullscreen, desaturated so the type stays legible -->
+  <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+    <img
+      src="/images/homepage-campus.jpg"
+      alt=""
+      class="h-full w-full object-cover grayscale"
+    />
+    <div class="absolute inset-0 bg-gradient-to-t from-deep via-deep/90 to-deep/70"></div>
+    <div class="absolute inset-0 bg-deep/40"></div>
+  </div>
+
+  <div class="relative mx-auto max-w-3xl px-5 py-24 text-center sm:px-8">
+    <!-- College identity — part of the page's own content, not a
+         separate header — sits at the top of the centered block. -->
+    <div class="flex items-center justify-center gap-3">
+      <img
+        src="/images/college-logo.jpg"
+        alt="St. Xavier's College, Kolkata crest"
+        class="h-8 w-8 rounded-full object-cover ring-1 ring-chalk/25 sm:h-9 sm:w-9"
+      />
+      <span class="h-5 w-px bg-chalk/25" aria-hidden="true"></span>
+      <p class="font-display text-xl tracking-wide text-chalk/85 sm:text-2xl">
+  St. Xavier's College (Autonomous), Kolkata
+</p>
+    </div>
+    <p class="text-sm tracking-wide text-chalk/85 sm:text-base"> presents to you </p>
+
+    <h1 class="xv-float mt-8 flex justify-center">
+      <img src="/images/xavathon.png" class="h-32 w-auto sm:h-56 lg:h-64" alt="Xavathon 2027" />
+    </h1>
+
+    <p class="font-display mt-2 text-brass">{event.edition} · {event.tagline}</p>
+
+    <p class="mt-5 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm text-mist/70">
+      <span>Brought to you by</span>
+      <img src="/images/sponsor1.png" alt="Sponsor 1" class="h-5 w-auto object-contain opacity-90" />
+      <img src="/images/sponsor2.png" alt="Sponsor 2" class="h-4 w-auto object-contain opacity-90" />
+      <img src="/images/sponsor3.png" alt="Sponsor 3" class="h-5 w-auto object-contain opacity-90" />
+    </p>
+
+    <div class="mx-auto mt-9 max-w-2xl border-t border-mist/20 pt-6">
+      <p class="mb-5 text-lg font-semibold tracking-wide text-white/80">The journey begins in</p>
+      <Countdown tone="dark" />
+    </div>
+  </div>
+</section>
