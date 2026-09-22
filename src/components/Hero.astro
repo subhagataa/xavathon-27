@@ -1,22 +1,33 @@
 ---
 import Countdown from "./Countdown.astro";
 import { event, races, registerUrl } from "../data/xavathon";
+
+/* Slideshow images, in order. No arrows/dots — this just loops
+   automatically forever via CSS (see .xv-hero-slide in global.css). */
+const slides = [
+  "/images/homepage-campus.jpg",
+  "/images/homepage-campus-2.jpg",
+  "/images/homepage-campus-3.jpg",
+];
 ---
 
 <!-- Truly fullscreen: the photo starts at the very top of the page.
      The only thing that ever sits on top of it is the hamburger
      button from Header.astro, floating in the corner — there is no
      strip, bar or HUD of any kind above or across this image. -->
-<section class="relative flex min-h-screen items-center justify-center overflow-hidden bg-teal text-chalk">
-  <!-- Campus backdrop, fullscreen, desaturated so the type stays legible -->
+<section class="relative flex min-h-screen items-center justify-center overflow-hidden bg-deep text-chalk">
+  <!-- Campus backdrop slideshow, fullscreen, desaturated so the type stays legible -->
   <div class="pointer-events-none absolute inset-0" aria-hidden="true">
-    <img
-      src="/images/homepage-campus.jpg"
-      alt=""
-      class="h-full w-full object-cover grayscale"
-    />
-    <div class="absolute inset-0 bg-gradient-to-t from-dark via-dark/90 to-dark/70"></div>
-    <div class="absolute inset-0 bg-/40"></div>
+    {slides.map((src, i) => (
+      <img
+        src={src}
+        alt=""
+        class="xv-hero-slide absolute inset-0 h-full w-full object-cover grayscale"
+        style={`--xv-slide-delay: ${i * 2}s`}
+      />
+    ))}
+    <div class="absolute inset-0 bg-gradient-to-t from-deep/85 via-deep/55 to-deep/45"></div>
+    <div class="absolute inset-0 bg-teal/25"></div>
   </div>
 
   <div class="relative mx-auto max-w-3xl px-5 py-24 text-center sm:px-8">
